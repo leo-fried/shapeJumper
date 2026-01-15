@@ -1,8 +1,8 @@
 # Define variables for easier maintenance
 CXX = g++
 CXXFLAGS = -Wall -Wextra -std=c++17
-TARGET = shapeJumper
-OBJS = main.o screen.o
+TARGET = s
+OBJS = main.o screen.o font.o properties.o
 
 # Default target: builds the program by linking object files
 all: $(TARGET)
@@ -18,6 +18,12 @@ main.o: main.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 screen.o: screen.cpp screen.h
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+font.o: font.cpp font.h
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+properties.o: properties.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Phony target for cleaning up generated files
