@@ -3,9 +3,8 @@
 
 #include <iostream>
 
-#include "properties.cpp"
-
-typedef unsigned int uint;
+#include "font.h"
+#include "properties.h"
 
 // The basic screen class in which title screen, menus, etc will build upon
 class Screen
@@ -20,9 +19,8 @@ class Screen
         ~Screen(){}
         /**
          * @brief Refreshes the screen content by clearing and redrawing it.
-         * @param content The content to be displayed on the screen after refresh.
          */
-        void refresh(std::string content = "");
+        virtual void refresh();
 };
 
 #endif // SCREEN_H

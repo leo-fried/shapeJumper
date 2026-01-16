@@ -2,7 +2,7 @@
 CXX = g++
 CXXFLAGS = -Wall -Wextra -std=c++17
 TARGET = s
-OBJS = main.o screen.o font.o properties.o
+OBJS = main.o screen.o font.o properties.o level.o player.o
 
 # Default target: builds the program by linking object files
 all: $(TARGET)
@@ -23,7 +23,13 @@ screen.o: screen.cpp screen.h
 font.o: font.cpp font.h
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-properties.o: properties.cpp
+properties.o: properties.cpp properties.h
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+level.o: level.cpp level.h
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+player.o: player.cpp player.h
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Phony target for cleaning up generated files

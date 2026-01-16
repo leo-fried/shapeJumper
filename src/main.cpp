@@ -2,6 +2,8 @@
 
 #include "screen.h"
 #include "font.h"
+#include "level.h"
+#include "properties.h"
 
 
 int main (int argc, char** argv)
@@ -11,17 +13,16 @@ int main (int argc, char** argv)
     // Objects
     Screen s;
     Font f;
-
-    f.printChar('A');
-
-    /*
-    s.refresh("Shape Jumper\nPress enter to start...\nPress Ctrl+C to quit.");
+    // Game Start
+    f.printText("WELCOME TO SHAPE JUMPER!");
+    f.printText("PRESS ENTER TO START...");
     std::cin.get();
-    for(int i = 0; i>=0; i++)
-    {
-        s.refresh(std::to_string(i));
-
-    }
-    */
+    s.refresh();
+    f.printText("LEVEL 1: EASY");
+    f.printText("PRESS ENTER TO CONTINUE...");
+    std::cin.get();
+    Level level1(1);
+    level1.refresh();
+    
     return EXIT_SUCCESS;
 }
