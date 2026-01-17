@@ -7,19 +7,19 @@ void Level::loadLevel(std::string filename)
     std::ifstream levelFile(filename);
     if(!levelFile.is_open())
     {
-        std::cerr << "Error: Could not open level file " << filename << "\n";
+        printw("Error: Could not open level file %s\n", filename.c_str());
         return;
     }
     std::string line;
     while(std::getline(levelFile, line))
     {
-        if(lineCount != LINES) std::cout << line << "\n";
+        if(lineCount != LINES) printw("%s\n", line.c_str());
         else 
         {
             char icon = p.getIcon();
             // Print icon at the start of the line
             line[10] = icon; // Place the icon in the level
-            std::cout << line;
+            printw("%s\n", line.c_str());
         }
         lineCount++;
     }
@@ -30,10 +30,30 @@ void Level::refresh()
 {
     // Main level loop
     loadLevel();
-    while(1)
+    using clock = std::chrono::steady_clock;
+
+    levelStartTime = clock::now();
+    levelComplete = false;
+    
+    while (1)
     {
-        // If user presses enter, let player jump
-        std::cin.get();
-        p.jump(1, 100);
+        int ch = getch();
+
+        if (ch == ' ')
+        {
+            printw("Jump!\n");
+        }
+        else if (ch == 27) // Quit if escape key is pressed
+        {
+            break;
+        }
+        now = clock::now();
+        if (!levelComplete &&
+            std::chrono::duration_cast<std::chrono::seconds>(now - levelStartTime).count() >= 5)
+        {
+            printw("Level Complete!\n");
+            break;
+        }
     }
+        
 }

@@ -384,7 +384,7 @@ void Font::printChar(char c, u32 row)
     }
     for(u32 i = 0; i < ROWS; i++)
     {
-        std::cout << carr[row][i];
+        printw("%c", carr[row][i]);
     }
     
 }
@@ -396,9 +396,10 @@ void Font::printText(std::string text)
         for(const auto& c : text)
         {
             printChar(c, row);
-            std::cout << " "; // Space between characters
+            printw(" "); // Space between characters
         }
-        std::cout << std::endl; // New line after each row
+        printw("\n"); // New line after each row
     }
-    std::cout << std::endl; // Extra line after the text
+    printw("\n"); // Extra line after the text
+    refresh();
 }

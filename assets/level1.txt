@@ -1,5 +1,5 @@
 
-                                                                             Press Enter to Jump!
+                                                                             Press Space to Jump!
 
 
 
@@ -11,4 +11,4 @@
 
 
 
-                                    /\                              /\/\                              /\/\                            |                                                                  HELLP
+                                    /\                              /\/\                              /\/\                            |

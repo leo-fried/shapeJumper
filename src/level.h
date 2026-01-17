@@ -3,16 +3,20 @@
 
 #include <iostream>
 #include <fstream>
+#include <thread>
+#include <chrono>
 
-#include "screen.h"
 #include "player.h"
 #include "properties.h"
 
-class Level : public Screen
+class Level
 {
     private:
         u32 levelNumber;
         Player p;
+        std::chrono::time_point<std::chrono::steady_clock> levelStartTime;
+        bool levelComplete;
+        std::chrono::time_point<std::chrono::steady_clock> now;
         /**
          * @brief Loads level data from text file.
          * @param filename The leveldata to load. Default: Level 1
@@ -24,9 +28,8 @@ class Level : public Screen
 
         /**
          * @brief Simulates the gameplay by refreshing the screen X times/second.
-         * @overload Overloads the refresh method from Screen
          */
-        void refresh() override;
+        void refresh();
         
 };
 
