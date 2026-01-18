@@ -13,19 +13,21 @@ void Level::loadLevel(std::string filename)
         return;
     }
     std::string line;
-    while(std::getline(levelFile, line))
+    while (std::getline(levelFile, line))
     {
-        if(lineCount != (LINES - p.getPosY())) printw("%s\n", line.c_str()); // draw the level normally except for the player line
-        else 
-        {
-            char icon = p.getIcon();
-            // Print icon at the start of the line
-            if(line.length() > 0) line[0] = icon; // Place the icon in the level
-            else line.push_back(icon);
-            printw("%s\n", line.c_str());
+        if (lineCount > LINES) break; // prevent drawing off-screen
+        if (lineCount == 5) {
+            for(const auto& c : "ATTEMPT: "+ std::to_string(attempts)) line.push_back(c); // Display attempt count
         }
-        lineCount++;
+        if (lineCount == (LINES - p.getPosY()))
+        {
+            if (line.empty()) line.push_back(' ');
+            line[0] = p.getIcon();
+        }
+    mvprintw(lineCount, 0, "%s", line.c_str());
+    lineCount++;
     }
+
     refresh(); // refresh the screen to show changes
     levelFile.close();
 }
@@ -41,7 +43,7 @@ void Level::simulateGame()
     // Main level loop
     while (1)
     {
-        int ch = getch();
+        u32 ch = getch();
         // only allow player to jump once per second
         if (ch == ' ' && !p.isFallingStatus()) // Jump if space key is pressed and player is not already falling
         {
