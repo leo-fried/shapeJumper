@@ -11,8 +11,13 @@ class Player
         u32 posY;
         bool alive;
         char icon; // player icon
+        
+        // Jump data
+        u32 deltaY; // change in Y position per jump
+        u32 height; // max jump height
+        bool isFalling; // whether the player is falling or rising
     public:
-        Player() : posY(0), alive(true), icon('@') {}
+        Player() : posY(0), alive(true), icon('@'), deltaY(1), height(3), isFalling(false) {}
 
         ~Player() {}
 
@@ -21,14 +26,38 @@ class Player
          * @return The character representing the player's icon.
          */
         char getIcon() {return icon;}
-
+ 
         /**
          * @brief Sets the player's icon.
          * @param c The character to set as the player's icon.
          */
         void setIcon(char c) {icon = c;} 
 
-        void jump(u32 deltaY, u32 height) { while(posY < height) posY += deltaY; while(posY > 0) posY -= deltaY;}
+        /**
+         * @brief Gets the player's Y position.
+         * @return The Y position of the player.
+         */
+        u32 getPosY() {return posY;}
+
+        /**
+         * @brief Sets the player's Y position.
+         * @param y The Y position to set.
+         */
+        void setPosY(u32 y) {posY = y;}
+
+        u32 getDeltaY() {return deltaY;}
+        void setDeltaY(u32 dy) {deltaY = dy;}
+
+        u32 getHeight() {return height;}
+        void setHeight(u32 h) {height = h;}
+
+        bool isFallingStatus() {return isFalling;}
+        void setFalling(bool falling) {isFalling = falling;}
+
+        /**
+         * @brief Makes the player jump.
+         */
+        void jump();
 };
 
 #endif // PLAYER_H

@@ -29,7 +29,7 @@ class Level
         /**
          * @brief Simulates the gameplay by refreshing the screen X times/second.
          */
-        void refresh();
+        void simulateGame();
         
 };
 

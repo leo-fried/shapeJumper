@@ -25,7 +25,7 @@ int main (int argc, char** argv)
     clear();
 
     Level level1(1);
-    level1.refresh();
+    level1.simulateGame();
     
     shutdownTerminal();
     return EXIT_SUCCESS;
