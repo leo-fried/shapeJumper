@@ -1,6 +1,7 @@
 #ifndef PROPERTIES_H
 #define PROPERTIES_H
 
+#include <cstdlib> // For general purpose functions
 #include <ncurses.h> // Set up ternminal for game interface
 
 // Type Definitions

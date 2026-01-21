@@ -1,6 +1,6 @@
 #include "level.h"
 
-void Level::loadLevel(std::string filename)
+void Level::load(std::string filename)
 {
     clear(); // Clear current display before reloading level
 
@@ -34,7 +34,7 @@ void Level::loadLevel(std::string filename)
 
 void Level::simulateGame()
 {
-    loadLevel();
+    load("../assets/level1.txt");
     using clock = std::chrono::steady_clock;
 
     levelStartTime = clock::now();
@@ -43,7 +43,7 @@ void Level::simulateGame()
     // Main level loop
     while (1)
     {
-        u32 ch = getch();
+        s32 ch = getch();
         // only allow player to jump once per second
         if (ch == ' ' && !p.isFallingStatus()) // Jump if space key is pressed and player is not already falling
         {
@@ -51,7 +51,7 @@ void Level::simulateGame()
             for (u32 i = 0; i < (u32)(2.0 * ((double)p.getHeight() / (double)p.getDeltaY())); i++) // use a double cast to avoid integer division truncation then convert back to u32
             {
                 p.jump();
-                loadLevel();
+                load("../assets/level1.txt");
                 std::this_thread::sleep_for(std::chrono::milliseconds(100)); // Control jump speed to 10 times/second
             }
         }
@@ -59,16 +59,6 @@ void Level::simulateGame()
         {
             break;
         }
-        /*
-        loadLevel(); // Refresh level display
-        std::this_thread::sleep_for(std::chrono::milliseconds(33)); // Control refresh rate to 30 times/second
-        now = clock::now();
-        if (!levelComplete && std::chrono::duration_cast<std::chrono::seconds>(now - levelStartTime).count() >= 20)
-        {
-            printw("Level Complete!\n");
-            //break;
-        }
-        */
     }
     
         

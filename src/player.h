@@ -11,6 +11,8 @@ class Player
         u32 posY;
         bool alive;
         char icon; // player icon
+        char icons[8] = {'@', '!', '%', '&', 'O', 'M', 'Q', '+'}; // available icons
+        const u32 ICONCOUNT = 8;
         
         // Jump data
         u32 deltaY; // change in Y position per jump
@@ -33,6 +35,8 @@ class Player
          */
         void setIcon(char c) {icon = c;} 
 
+        char* getAvailableIcons() {return icons;}
+        u32 getIconCount() {return ICONCOUNT;}
         /**
          * @brief Gets the player's Y position.
          * @return The Y position of the player.
