@@ -1,8 +1,6 @@
 #ifndef SCREEN_H
 #define SCREEN_H
 
-#include <string>
-
 #include "properties.h"
 
 // Basic screen interface class
@@ -11,9 +9,8 @@ class Screen
     protected:
         /**
          * @brief Loads data to the given screen
-         * @param filename The data to load from a file.
          */
-        virtual void load(std::string filename) = 0;
+        virtual void load() = 0;
     public:
         Screen() {}
         virtual ~Screen() {}

@@ -1,5 +1,7 @@
 #include "properties.h"
 
+bool g_debug = false;
+
 void initTerminal()
 {
     initscr();

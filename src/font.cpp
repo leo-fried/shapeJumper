@@ -335,6 +335,30 @@ void Font::printChar(char c, u32 row)
             std::memcpy(carr, ONE, sizeof(carr));
             break;
         }
+        case '2':
+        {
+            const char TWO [ROWS][COLS] = {
+                {' ', '#','#', '#', ' '},
+                {'#', ' ', ' ', '#', ' '},
+                {' ', ' ', '#', ' ', ' '},
+                {' ', '#', ' ', ' ', ' '},
+                {'#', '#','#', '#', ' '}
+            };
+            std::memcpy(carr, TWO, sizeof(carr));
+            break;
+        }
+        case '3':
+        {
+            const char THREE [ROWS][COLS] = {
+                {' ', '#','#', '#', ' '},
+                {'#', ' ', ' ', '#', ' '},
+                {' ', ' ', '#', '#', ' '},
+                {'#', ' ', ' ', '#', ' '},
+                {' ', '#','#', '#', ' '}
+            };
+            std::memcpy(carr, THREE, sizeof(carr));
+            break;
+        }
         case '.':
         {
             const char PER [ROWS][COLS] = {

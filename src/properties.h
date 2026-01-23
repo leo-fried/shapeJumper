@@ -15,6 +15,8 @@ using s16 = short int;
 using s32 = int;
 using s64 = long long int;
 
+extern bool g_debug; // For debug mode
+
 /**
  * @brief Initializes the terminal for ncurses mode.
  */
