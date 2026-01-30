@@ -8,23 +8,23 @@
 class Player
 {
     private:
-        u32 posY;
-        bool alive;
-        std::string icon; // player icon
-        std::string icons[8] = {"@", "!", "%", "&", "O", "M", "Q", "+"}; // available icons
+        std::string icons[8] = {"@", "!", "%", "&", "$", "M", "Q", "+"}; // available icons
         const u32 ICONCOUNT = 8;
 
         bool completedLevels[3]; // tracks levels that the player has completed
-        
+    protected:
+        u32 posY;
+        bool alive;
+        std::string icon; // Player icon
+        u32 deltaY; // Change in Y pos per jump
         // Jump data
-        u32 deltaY; // change in Y position per jump
         u32 height; // max jump height
         bool isJumping; // whether the player is currently jumping
         bool isFalling; // whether the player is falling or rising
     public:
-        Player() : posY(0), alive(true), icon("@"), completedLevels{false, false, false}, deltaY(1), height(5), isJumping(false), isFalling(false) {}
+        Player() : completedLevels{false, false, false}, posY(0), alive(true), icon("@"), deltaY(1), height(5), isJumping(false), isFalling(false) {}
 
-        ~Player() {}
+        virtual ~Player() {}
 
         /**
          * @brief Gets the player's icon.
@@ -72,8 +72,14 @@ class Player
 
         /**
          * @brief Makes the player jump.
+         * @return True if jump is incomplete, false if jump is complete
          */
-        void jump();
+        virtual bool jump();
+
+        /**
+         * @brief Causes the player to fall
+         */
+        virtual void fall() { return; }
 };
 
 #endif // PLAYER_H

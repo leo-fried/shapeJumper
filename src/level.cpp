@@ -31,23 +31,52 @@ void Level::load()
             levelData[lineCount].insert(0, "                            ATTEMPT " + std::to_string(attempts));// Display attempt count
             attemptFlag = false;
         }
-        if (lineCount == (LINES - p.getPosY()))
+        if (lineCount == (LINES - p->getPosY()))
         {
             if (line.empty()) levelData[lineCount].insert(0 ," ");
-            // Player has reached end of level
-            if(levelData[lineCount][0] == '[') 
+            char currPos = levelData[lineCount][0];
+            // Collision Logic
+            switch (currPos)
             {
-                levelComplete = true;
-                return;
-            }
-            // Collision = Death
-            if(levelData[lineCount][0]!= ' ' && !g_debug) 
-            {
-                p.setAlive(false);
-                return;
+                // Player has reached end of level
+                case '[': 
+                {
+                    levelComplete = true;
+                    return;
+                }
+                // Ship Portal
+                case '?':
+                {
+                    if(!pCpy) pCpy = std::move(p);
+                    p = std::make_unique<Ship>();
+                    break;
+                }
+                // Ball Portal
+                case ';':
+                {
+                    if(!pCpy) pCpy = std::move(p);
+                    p = std::make_unique<Ball>();
+                    break;
+                }
+                // Player Portal
+                case '0':
+                {
+                    if(pCpy) p = std::move(pCpy);
+                    break;
+                }
+                // Other
+                default:
+                {
+                    if (g_debug || currPos == ' ') break; // Not a death
+                    else // Death 
+                    {
+                        p->setAlive(false);
+                        return;
+                    }
+                }
             }
 
-            levelData[lineCount].insert(0, p.getIcon());
+            levelData[lineCount].insert(0, p->getIcon());
         }
         mvprintw(lineCount, 0, "%s", levelData[lineCount].c_str());
         lineCount++;
@@ -57,58 +86,55 @@ void Level::load()
     // Move level by 1 space at a time for next iteration
     for(auto& line : levelData)
     {
-        if(line[0] != p.getIcon()[0]) line.erase(0,1); // remove first character of each line if available besides bottom line
+        if(line.empty()) continue;
+        if(line[0] != p->getIcon()[0]) line.erase(0,1); // remove first character of each line if available besides bottom line
         else line.erase(0,2); // remove first two characters if player is present
         
     }
     
 }
 
-void Level::simulateGame()
+std::unique_ptr<Player> Level::simulateGame()
 {
-    using clock = std::chrono::steady_clock;
-    jumpDelay = clock::now();
     load();
     levelComplete = false;
+    delay = std::chrono::steady_clock::now();
     
     // Main level loop
     while (1)
     {
+        now = std::chrono::steady_clock::now();
         s32 ch = getch();
         // Check if level is complete
         if(levelComplete)
         {
-            p.setCompletedLevel(levelNumber - 1); // Mark level as complete
+            p->setCompletedLevel(levelNumber - 1); // Mark level as complete
             clear();
             f.printText("LEVEL COMPLETE!!!");
             printw("\nAttempts: %s\n", std::to_string(attempts).c_str());
             f.printText("PRESS ESC...");
             while ((ch = getch()) != 27) {} // wait for escape key
             clear();
-            return;
+            return std::move(p);
         }
         // Check for Death
-        if(!p.aliveStatus())
+        if(!p->aliveStatus())
         {
             std::this_thread::sleep_for(std::chrono::milliseconds(500)); // wait before restarting level
             attempts++;
             levelData = levelDataCpy; // Copy Original data back to indicate new attempt
             // Reset Game State
-            p.setAlive(true);
+            p->setAlive(true);
             attemptFlag = true;
         }
-        now = clock::now();
         if (ch == ' ')
         {
-            if(!p.isJumpingStatus() && std::chrono::duration_cast<std::chrono::milliseconds>(now - jumpDelay).count() >= 500) // Jump if space key is pressed, player is not already falling and 1s have passed since last jump)
+            if(!p->isJumpingStatus()) // Jump if space key is pressed and player is not already jumping
             {
-                p.setJumping(true); // allow for jump key to be held
-            
-                jumpDelay = clock::now();
-                // loop for jump up and down
-                for (u32 i = 0; i < (u32)(2.0 * ((double)p.getHeight() / (double)p.getDeltaY())); i++) // use a double cast to avoid integer division truncation then convert back to u32
+                delay = std::chrono::steady_clock::now();
+                p->setJumping(true); // allow for jump key to be held
+                while (p->jump() == true) // jump
                 {
-                    p.jump();
                     load();
                     std::this_thread::sleep_for(std::chrono::milliseconds(50)); // Control jump speed to 20 times/second
                 }
@@ -117,11 +143,12 @@ void Level::simulateGame()
         else if (ch == 27) // Quit if escape key is pressed
         {
             clear();
-            return;
+            return std::move(p);
         }
         else 
         {
-            p.setJumping(false); // allow for jump key to be held
+            p->setJumping(false); // allow for jump key to be held
+            if(now - delay > std::chrono::milliseconds(250)) p->fall();
             load(); // Simply reload the level
             std::this_thread::sleep_for(std::chrono::milliseconds(50)); // Control reload speed to 20 times/second
         }

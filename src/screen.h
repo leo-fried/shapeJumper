@@ -1,6 +1,9 @@
 #ifndef SCREEN_H
 #define SCREEN_H
 
+#include <memory>
+
+#include "player.h"
 #include "properties.h"
 
 // Basic screen interface class
@@ -17,8 +20,9 @@ class Screen
 
         /**
          * @brief Simulates the gameplay by refreshing the screen X times/second.
+         * @return Returns the player
          */
-        virtual void simulateGame() = 0;
+        virtual std::unique_ptr<Player> simulateGame() = 0;
 };
 
 #endif // SCREEN_H

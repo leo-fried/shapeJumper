@@ -1,7 +1,8 @@
 #include "player.h"
 
-void Player::jump()
+bool Player::jump()
 {
+    
     if(!isFalling) posY += deltaY;
     else posY -= deltaY;
     if (posY >= height) 
@@ -9,5 +10,6 @@ void Player::jump()
         posY = height; // Clamp height
         isFalling = true;
     }
-    if(posY == 0) isFalling = false; // Reset bool for next jump
+    if(posY == 0) { isFalling = false; return false; }// Reset bool for next jump
+    return true;
 }

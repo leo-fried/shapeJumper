@@ -8,17 +8,18 @@ int main (int argc, char** argv)
     initTerminal();
 
     // Debug mode (Unlocks all levels and disables collision)
-    if(argc == 2 && std::string(argv[1]) == "--debug")
+    if(argc == 2)
     {
+        if(std::string(argv[1]) != "--debug") { shutdownTerminal(); std::cerr << "Usage: " << argv[0] << " [--debug]" << std::endl; return EXIT_FAILURE; }
         g_debug = true;
         printw("Debug mode activated.\n");
     }
 
     // Objects
     Font f;
-    Player p;
-    std::string* icons = p.getAvailableIcons();
-    const u32 ICONCOUNT = p.getIconCount();
+    std::unique_ptr<Player> p = std::make_unique<Player>();
+    std::string* icons = p->getAvailableIcons();
+    const u32 ICONCOUNT = p->getIconCount();
     const u32 LEVELCOUNT = 3;
     u32 currLevel = 0;
 
@@ -68,7 +69,7 @@ int main (int argc, char** argv)
                 else if(ch == '\n')
                 {
                     // Confirm selection
-                    p.setIcon(tempIcon);
+                    p->setIcon(tempIcon);
                     break;
                 }
                 clear();
@@ -90,14 +91,14 @@ int main (int argc, char** argv)
                 case 1:
                 {
                     f.printText("LEVEL 2: MEDIUM");
-                    if(p.getCompletedLevel(0) || g_debug) f.printText("PRESS ENTER TO CONTINUE...");
+                    if(p->getCompletedLevel(0) || g_debug) f.printText("PRESS ENTER TO CONTINUE...");
                     else f.printText("LOCKED...");
                     break;
                 }
                 case 2:
                 {
                     f.printText("LEVEL 3: HARD");
-                    if((p.getCompletedLevel(0) && p.getCompletedLevel(1)) || g_debug) f.printText("PRESS ENTER TO CONTINUE...");
+                    if((p->getCompletedLevel(0) && p->getCompletedLevel(1)) || g_debug) f.printText("PRESS ENTER TO CONTINUE...");
                     else f.printText("LOCKED...");
                     break;
                 }
@@ -125,25 +126,25 @@ int main (int argc, char** argv)
                 {
                     case 0:
                     {
-                        Level level1(1, &p);
-                        level1.simulateGame();
+                        Level level1(1, std::move(p));
+                        p = level1.simulateGame(); // Return player after level is finished
                         break;
                     }
                     case 1:
                     {
-                        if(p.getCompletedLevel(0) || g_debug)
+                        if(p->getCompletedLevel(0) || g_debug)
                         {
-                            Level level2(2, &p);
-                            level2.simulateGame();
+                            Level level2(2, std::move(p));
+                            p = level2.simulateGame();
                         }
                         break;
                     }
                     case 2:
                     {
-                        if((p.getCompletedLevel(0) && p.getCompletedLevel(1)) || g_debug)
+                        if((p->getCompletedLevel(0) && p->getCompletedLevel(1)) || g_debug)
                         {
-                            Level level3(3, &p);
-                            level3.simulateGame();
+                            Level level3(3, std::move(p));
+                            p = level3.simulateGame();
                         }
                         break;
                     }
