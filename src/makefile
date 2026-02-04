@@ -3,7 +3,7 @@ CXX = g++
 CXXFLAGS = -Wall -Wextra -std=c++17
 LDFLAGS = -lncurses -lsfml-audio -lsfml-system
 TARGET = s
-OBJS = main.o screen.o font.o properties.o level.o player.o ship.o ball.o
+OBJS = main.o screen.o font.o properties.o level.o player.o ship.o ball.o sfx.o
 
 # Default target: builds the program by linking object files
 all: $(TARGET)
@@ -39,6 +39,8 @@ ship.o: ship.cpp ship.h
 ball.o: ball.cpp ball.h
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
+sfx.o: sfx.cpp sfx.h
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Phony target for cleaning up generated files
 .PHONY: clean

@@ -1,6 +1,7 @@
 #include "font.h"
 #include "level.h"
 #include "properties.h"
+#include "sfx.h"
 
 
 int main (int argc, char** argv)
@@ -17,6 +18,7 @@ int main (int argc, char** argv)
 
     // Objects
     Font f;
+    Sfx sfx;
     std::unique_ptr<Player> p = std::make_unique<Player>();
     std::string* icons = p->getAvailableIcons();
     const u32 ICONCOUNT = p->getIconCount();
@@ -26,6 +28,7 @@ int main (int argc, char** argv)
     // Game Start
     while(1)
         {
+        sfx.playAudio("title.mp3", true);
         printw("Press \"C\" to select character\n");
         f.printText("WELCOME TO SHAPE JUMPER!");
         f.printText("PRESS ENTER TO START...");
@@ -80,6 +83,7 @@ int main (int argc, char** argv)
         while(1)
         {
             clear();
+            sfx.playAudio("title.mp3", true); // If title music not playing, play it
             switch(currLevel)
             {
                 case 0:
@@ -122,6 +126,8 @@ int main (int argc, char** argv)
             {
                 // Confirm selection
                 clear();
+                // Stop title screen audio
+                sfx.stopAudio("title.mp3");
                 switch(currLevel)
                 {
                     case 0:

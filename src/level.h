@@ -13,6 +13,7 @@
 #include "player.h"
 #include "properties.h"
 #include "screen.h"
+#include "sfx.h"
 #include "ship.h"
 
 class Level : public Screen
@@ -34,6 +35,7 @@ class Level : public Screen
         bool eop = false; // Flag for end of platform behavior
         bool levelComplete;
         Font f; // Font for level complete message
+        Sfx sfx; // Sound effects object
 
         /**
          * @brief Loads level data from text file and puts it into vector.

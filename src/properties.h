@@ -4,7 +4,6 @@
 #include <cstdlib> // For general purpose functions
 #include <iostream>
 #include <ncurses.h> // Set up ternminal for game interface
-#include <SFML/Audio.hpp> // For in-game audio
 #include <string>
 
 // Type Definitions
@@ -19,12 +18,6 @@ using s32 = int;
 using s64 = long long int;
 
 extern bool g_debug; // For debug mode
-
-/**
- * @brief plays a given sound
- * @param path The file path for the sound effect
- */
-void playSfx(const std::string& path);
 
 /**
  * @brief Initializes the terminal for ncurses mode.

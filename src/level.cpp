@@ -158,9 +158,10 @@ std::unique_ptr<Player> Level::simulateGame()
                 delay = std::chrono::steady_clock::now();
                 p->setJumping(true); // allow for jump key to be held
                 u32 currY = p->getPosY(); // Get current Y pos before jump commences
+                
 
-                // Play Jump sound effect
-                playSfx("../assets/jump.wav");
+                // Attempt to play jump sound
+                sfx.playAudio("jump.wav");
 
                 while (p->jump(currY) == true) // jump
                 {
