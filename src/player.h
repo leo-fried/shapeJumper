@@ -14,6 +14,7 @@ class Player
         bool completedLevels[3]; // tracks levels that the player has completed
     protected:
         u32 posY;
+        u32 platformPos;
         bool alive;
         std::string icon; // Player icon
         u32 deltaY; // Change in Y pos per jump
@@ -22,7 +23,7 @@ class Player
         bool isJumping; // whether the player is currently jumping
         bool isFalling; // whether the player is falling or rising
     public:
-        Player() : completedLevels{false, false, false}, posY(0), alive(true), icon("@"), deltaY(1), height(5), isJumping(false), isFalling(false) {}
+        Player() : completedLevels{false, false, false}, posY(0), platformPos(0), alive(true), icon("@"), deltaY(1), height(5), isJumping(false), isFalling(false) {}
 
         virtual ~Player() {}
 
@@ -40,6 +41,7 @@ class Player
 
         std::string* getAvailableIcons() {return icons;}
         u32 getIconCount() {return ICONCOUNT;}
+
         /**
          * @brief Gets the player's Y position.
          * @return The Y position of the player.
@@ -52,6 +54,18 @@ class Player
          */
         void setPosY(u32 y) {posY = y;}
 
+        /**
+         * @brief Gets the current platform position.
+         * @return The current platform position.
+         */
+        u32 getPlatformPos() {return platformPos;}
+
+        /**
+         * @brief Sets the current platform position.
+         * @param y The Y position to set.
+         */
+        void setPlatformPos(u32 y) {platformPos = y;}
+
         u32 getDeltaY() {return deltaY;}
         void setDeltaY(u32 dy) {deltaY = dy;}
 
@@ -62,7 +76,7 @@ class Player
         void setFalling(bool falling) {isFalling = falling;}
 
         bool isJumpingStatus() {return isJumping;}
-        void setJumping(bool jumping) {isJumping = jumping;}
+        void setJumping(bool jumping) { isJumping = jumping; }
 
         bool aliveStatus() { return alive; }
         void setAlive(bool a) {alive = a; }
@@ -74,7 +88,7 @@ class Player
          * @brief Makes the player jump.
          * @return True if jump is incomplete, false if jump is complete
          */
-        virtual bool jump();
+        virtual bool jump(u32 y = 0);
 
         /**
          * @brief Causes the player to fall

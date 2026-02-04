@@ -17,7 +17,7 @@ class Ship : public Player
          * @brief Makes the ship jump (Different than the standard player)
          * @return True if jump is incomplete, false if jump is complete
          */
-        bool jump() override;
+        bool jump(u32 y) override;
 
         /**
          * @brief Causes the ship to fall

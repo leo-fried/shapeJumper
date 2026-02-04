@@ -19,7 +19,7 @@ class Ball : public Player
          * @brief Makes the Ball jump (Different than the standard player)
          * @return True if jump is incomplete, false if jump is complete
          */
-        bool jump() override;
+        bool jump(u32 y) override;
 };
 
 #endif // Ball_H

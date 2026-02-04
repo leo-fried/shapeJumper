@@ -1,7 +1,7 @@
 # Define variables for easier maintenance
 CXX = g++
 CXXFLAGS = -Wall -Wextra -std=c++17
-LDFLAGS = -lncurses
+LDFLAGS = -lncurses -lsfml-audio -lsfml-system
 TARGET = s
 OBJS = main.o screen.o font.o properties.o level.o player.o ship.o ball.o
 

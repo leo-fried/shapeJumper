@@ -6,6 +6,7 @@ void Level::loadFromFile(std::string filename)
     if(!levelFile.is_open())
     {
         printw("Error: Could not open level file %s\n", filename.c_str());
+        shutdownTerminal();
         exit(-1); // quit the program with an error
     }
     std::string line;
@@ -64,20 +65,45 @@ void Level::load()
                     if(pCpy) p = std::move(pCpy);
                     break;
                 }
+                // Platform
+                case '_':
+                {
+                    // Set current platform position
+                    p->setPlatformPos(LINES-lineCount);
+                    if(p->getPlatformPos() == p->getPosY()) eop = false; // If player is currently falling, stop
+                    if(levelData[lineCount][1] != '_') eop = true;// If next platform is not a platform, prepare to fall on next frame
+                    break;
+                }
                 // Other
+                case ' ':
+                {
+                    if(p->isJumpingStatus()) eop = true;
+                    // End of platform, fall 
+                        if(eop) 
+                        {
+                            p->setPlatformPos(0); // reset platform
+                            if(p->isJumpingStatus()) eop = false;
+                            else
+                            {
+                                p->setPosY(p->getPosY()-1);
+                            }
+                        }
+                    break;
+                }
                 default:
                 {
-                    if (g_debug || currPos == ' ') break; // Not a death
-                    else // Death 
+                    if(!g_debug) // Death 
                     {
                         p->setAlive(false);
                         return;
                     }
+                    break;
                 }
             }
 
-            levelData[lineCount].insert(0, p->getIcon());
+            levelData[lineCount][0] = p->getIcon()[0]; // Place player icon on screen
         }
+        // Print the current line
         mvprintw(lineCount, 0, "%s", levelData[lineCount].c_str());
         lineCount++;
     }
@@ -87,9 +113,7 @@ void Level::load()
     for(auto& line : levelData)
     {
         if(line.empty()) continue;
-        if(line[0] != p->getIcon()[0]) line.erase(0,1); // remove first character of each line if available besides bottom line
-        else line.erase(0,2); // remove first two characters if player is present
-        
+        line.erase(0,1);        
     }
     
 }
@@ -133,7 +157,12 @@ std::unique_ptr<Player> Level::simulateGame()
             {
                 delay = std::chrono::steady_clock::now();
                 p->setJumping(true); // allow for jump key to be held
-                while (p->jump() == true) // jump
+                u32 currY = p->getPosY(); // Get current Y pos before jump commences
+
+                // Play Jump sound effect
+                playSfx("../assets/jump.wav");
+
+                while (p->jump(currY) == true) // jump
                 {
                     load();
                     std::this_thread::sleep_for(std::chrono::milliseconds(50)); // Control jump speed to 20 times/second

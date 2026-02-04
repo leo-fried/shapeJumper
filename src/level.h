@@ -31,6 +31,7 @@ class Level : public Screen
         //Ball* b; // Object for ball mode
         u32 attempts; // Number of attempts made by the player
         bool attemptFlag = true; // Flag for attempt counter
+        bool eop = false; // Flag for end of platform behavior
         bool levelComplete;
         Font f; // Font for level complete message
 

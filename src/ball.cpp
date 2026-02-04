@@ -1,6 +1,6 @@
 #include "ball.h"
 
-bool Ball::jump()
+bool Ball::jump([[maybe_unused]] u32 y)
 {
     // As long as jump is held fly up, else fall
     if(!gravity && posY < 13) 

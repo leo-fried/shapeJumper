@@ -1,15 +1,19 @@
 #include "player.h"
 
-bool Player::jump()
+bool Player::jump(u32 y)
 {
-    
     if(!isFalling) posY += deltaY;
     else posY -= deltaY;
-    if (posY >= height) 
+    if (posY >= height + y) 
     {
-        posY = height; // Clamp height
+        posY = height + y; // Clamp height
         isFalling = true;
     }
-    if(posY == 0) { isFalling = false; return false; }// Reset bool for next jump
+    if(posY <= platformPos) 
+    { 
+        posY = platformPos;
+        isFalling = false; 
+        return false; 
+    } // Reset bool for next jump
     return true;
 }
