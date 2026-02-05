@@ -4,7 +4,7 @@ Shape Jumper is a simple yet addicting platforming game where the user must avoi
 
 ## Installation
 
-Install the SFLM Library using the following command if you wish to listen to the in-game audio: `sudo apt install libsfml-dev`
+Install the SFLM Library using the following command if you wish to listen to the in-game audio: `sudo apt install libsfml-dev` or `sudo dnf install SFML-devel` depending on your distrobution.
 
 Build the Program with the included makefile. Use the `make` command to build the executable and then run it using `./shapeJumper`
 
