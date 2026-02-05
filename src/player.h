@@ -1,7 +1,10 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include <fstream>
 #include <iostream>
+#include <iterator>
+
 
 #include "properties.h"
 
@@ -10,8 +13,14 @@ class Player
     private:
         std::string icons[8] = {"@", "!", "%", "&", "$", "M", "Q", "+"}; // available icons
         const u32 ICONCOUNT = 8;
-
         bool completedLevels[3]; // tracks levels that the player has completed
+
+        /**
+         * @brief Loads the player's completed levels from a file.
+         * @param filename The file to load the data from (default, playerSave.txt).
+         */
+        void loadData(std::string filename = "playerSave.txt");
+
     protected:
         u32 posY;
         u32 platformPos;
@@ -23,7 +32,7 @@ class Player
         bool isJumping; // whether the player is currently jumping
         bool isFalling; // whether the player is falling or rising
     public:
-        Player() : completedLevels{false, false, false}, posY(0), platformPos(0), alive(true), icon("@"), deltaY(1), height(5), isJumping(false), isFalling(false) {}
+        Player() : completedLevels{false, false, false}, posY(0), platformPos(0), alive(true), icon("@"), deltaY(1), height(4), isJumping(false), isFalling(false) { loadData(); }
 
         virtual ~Player() {}
 
@@ -94,6 +103,13 @@ class Player
          * @brief Causes the player to fall
          */
         virtual void fall() { return; }
+
+        /**
+         * @brief Saves the player's completed levels to a file.
+         * @param filename The file to save the data to (default, playerSave.txt).
+         * @return 0 if successful, -1 if unsuccessful
+         */
+        s16 saveData(std::string filename = "playerSave.txt");
 };
 
 #endif // PLAYER_H

@@ -81,7 +81,6 @@ int main (int argc, char** argv)
         while(1)
         {
             clear();
-            menuMusic.playAudio(true); // If title music not playing, play it
             switch(currLevel)
             {
                 case 0:
@@ -124,14 +123,14 @@ int main (int argc, char** argv)
             {
                 // Confirm selection
                 clear();
-                // Stop title screen audio
-                menuMusic.stopAudio();
                 switch(currLevel)
                 {
                     case 0:
                     {
                         Level level1(1, std::move(p));
+                        menuMusic.stopAudio();
                         p = level1.simulateGame(); // Return player after level is finished
+                        menuMusic.playAudio(true); // Restart music
                         break;
                     }
                     case 1:
@@ -139,7 +138,9 @@ int main (int argc, char** argv)
                         if(p->getCompletedLevel(0) || g_debug)
                         {
                             Level level2(2, std::move(p));
+                            menuMusic.stopAudio();
                             p = level2.simulateGame();
+                            menuMusic.playAudio(true); // Restart music
                         }
                         break;
                     }
@@ -148,7 +149,9 @@ int main (int argc, char** argv)
                         if((p->getCompletedLevel(0) && p->getCompletedLevel(1)) || g_debug)
                         {
                             Level level3(3, std::move(p));
+                            menuMusic.stopAudio();
                             p = level3.simulateGame();
+                            menuMusic.playAudio(true); // Restart music
                         }
                         break;
                     }
@@ -160,6 +163,8 @@ int main (int argc, char** argv)
                 }
                 
             }
+            // Attempt to save data
+            if (p->saveData() == -1) std::cerr << "Unable to save data.\n";
             clear();
         }
         

@@ -29,7 +29,13 @@ void Level::load()
         if (lineCount > LINES) break; // prevent drawing off-screen
         if (lineCount == 5 && attemptFlag) 
         {
-            levelData[lineCount].insert(0, "                            ATTEMPT " + std::to_string(attempts));// Display attempt count
+            std::string at = "ATTEMPT "+std::to_string(attempts); // Attempt string
+            u8 idx = 0;
+            for(const auto& a: at)
+            {
+                levelData[lineCount][28 + idx] = a;
+                idx++;
+            }
             attemptFlag = false;
         }
         if (lineCount == (LINES - p->getPosY()))
@@ -147,7 +153,7 @@ std::unique_ptr<Player> Level::simulateGame()
         // Check for Death
         if(!p->aliveStatus())
         {
-            deathSfx.playAudio();
+            deathSfx.playAudio(33.3f);
             std::this_thread::sleep_for(std::chrono::milliseconds(500)); // wait before restarting level
             // Restart audio
             lvlMusic.restartAudio();

@@ -17,6 +17,8 @@ using s16 = short int;
 using s32 = int;
 using s64 = long long int;
 
+using uSize = std::size_t;
+
 extern bool g_debug; // For debug mode
 
 /**
