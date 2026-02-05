@@ -17,7 +17,7 @@ int main (int argc, char** argv)
 
     // Objects
     Font f;
-    Music menuMusic("title_fixed.ogg");
+    Music menuMusic("title.ogg");
     std::unique_ptr<Player> p = std::make_unique<Player>();
     std::string* icons = p->getAvailableIcons();
     const u32 ICONCOUNT = p->getIconCount();
@@ -81,7 +81,7 @@ int main (int argc, char** argv)
         while(1)
         {
             clear();
-            //menuMusic.playAudio(true); // If title music not playing, play it
+            menuMusic.playAudio(true); // If title music not playing, play it
             switch(currLevel)
             {
                 case 0:
@@ -125,7 +125,7 @@ int main (int argc, char** argv)
                 // Confirm selection
                 clear();
                 // Stop title screen audio
-                //menuMusic.stopAudio();
+                menuMusic.stopAudio();
                 switch(currLevel)
                 {
                     case 0:
