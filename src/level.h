@@ -35,7 +35,11 @@ class Level : public Screen
         bool eop = false; // Flag for end of platform behavior
         bool levelComplete;
         Font f; // Font for level complete message
-        Sfx sfx; // Sound effects object
+
+        // Sounds
+        Music lvlMusic;
+        Sfx deathSfx;
+        Sfx clearSfx;
 
         /**
          * @brief Loads level data from text file and puts it into vector.
@@ -48,8 +52,9 @@ class Level : public Screen
         void load() override;
 
     public:
-        Level(u32 number, std::unique_ptr<Player> player) : levelNumber(number), p(std::move(player)), attempts(1), levelComplete(false) { loadFromFile("../assets/level" + std::to_string(number) + ".txt"); }
-        ~Level() {}
+        Level(u32 number, std::unique_ptr<Player> player) : levelNumber(number), p(std::move(player)), attempts(1), levelComplete(false), 
+        lvlMusic("level" + std::to_string(levelNumber) + ".ogg"), deathSfx("death.wav"), clearSfx("clear.wav") { loadFromFile("../assets/level" + std::to_string(number) + ".txt"); }
+        ~Level() {} 
 
 
         /**

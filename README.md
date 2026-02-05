@@ -25,6 +25,12 @@ https://www.youtube.com/channel/UCqBmRmtaHbuodGuCkrVYKPA
 Music powered by BreakingCopyright: https://youtu.be/
 🔎 Find more music here: https://breakingcopyright.com
 
+Level 1 Music: Song: Swing Rabbit ! Swing !
+Composer: Amarià
+Website: https://www.youtube.com/channel/UCjpsqeJxRUqIBSl0tVSlCog
+License: Creative Commons (BY 3.0) https://creativecommons.org/licenses/by/3.0/
+Music powered by BreakingCopyright: https://breakingcopyright.com
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)

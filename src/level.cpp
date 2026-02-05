@@ -123,6 +123,7 @@ std::unique_ptr<Player> Level::simulateGame()
     load();
     levelComplete = false;
     delay = std::chrono::steady_clock::now();
+    lvlMusic.playAudio(false, 10);
     
     // Main level loop
     while (1)
@@ -132,6 +133,8 @@ std::unique_ptr<Player> Level::simulateGame()
         // Check if level is complete
         if(levelComplete)
         {
+            clearSfx.playAudio();
+            lvlMusic.stopAudio();
             p->setCompletedLevel(levelNumber - 1); // Mark level as complete
             clear();
             f.printText("LEVEL COMPLETE!!!");
@@ -144,7 +147,12 @@ std::unique_ptr<Player> Level::simulateGame()
         // Check for Death
         if(!p->aliveStatus())
         {
+            deathSfx.playAudio();
             std::this_thread::sleep_for(std::chrono::milliseconds(500)); // wait before restarting level
+            // Restart audio
+            lvlMusic.restartAudio();
+            lvlMusic.playAudio(false, 10);
+
             attempts++;
             levelData = levelDataCpy; // Copy Original data back to indicate new attempt
             // Reset Game State
@@ -158,10 +166,6 @@ std::unique_ptr<Player> Level::simulateGame()
                 delay = std::chrono::steady_clock::now();
                 p->setJumping(true); // allow for jump key to be held
                 u32 currY = p->getPosY(); // Get current Y pos before jump commences
-                
-
-                // Attempt to play jump sound
-                sfx.playAudio("jump.wav");
 
                 while (p->jump(currY) == true) // jump
                 {
@@ -173,6 +177,7 @@ std::unique_ptr<Player> Level::simulateGame()
         else if (ch == 27) // Quit if escape key is pressed
         {
             clear();
+            lvlMusic.stopAudio();
             return std::move(p);
         }
         else 

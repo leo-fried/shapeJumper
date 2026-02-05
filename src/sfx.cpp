@@ -1,28 +1,18 @@
 #include "sfx.h"
 
-void Sfx::playAudio(std::string filename, bool repeat)
+void Music::loadFromFile()
 {
-    // Return if music is already playing (ENUM Status : 0 = Stopped, 1 = Paused, 2 = Playing) and music is meant to repeat(menus)
-    if(music.getStatus() == 2 && repeat) return;
-
     if (!music.openFromFile("../assets/" + filename)) 
     {
-        std::cerr << "Unable to load sfx: " << filename << "\n"; // sfx failed to load
-        exit(-1);
+        std::cerr << "Unable to load song: " << filename << "\n"; // music failed to load
     }
-
-    music.setLoop(repeat);
-
-    music.play();
 }
 
-void Sfx::stopAudio(std::string filename)
+void Music::playAudio(bool repeat, float volume)
 {
-    if (!music.openFromFile("../assets/" + filename)) 
-    {
-        std::cerr << "Unable to load sfx: " << filename << "\n"; // sfx failed to load
-        exit(-1);
-    }
+    music.setVolume(volume);
+    music.setLoop(repeat);
 
-     music.stop();
+    // play if music isn't already playing
+    if (music.getStatus() != sf::Music::Playing) music.play();
 }
