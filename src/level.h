@@ -41,6 +41,13 @@ class Level : public Screen
         Sfx deathSfx;
         Sfx clearSfx;
 
+        bool fall = false; // flag for falling
+        bool bounce = false; // flag for bounce pad
+        u8 coins = 0;
+        u32 speed; // Level speed
+        
+        char prevChar; // stores the previous character for frame advancement
+
         /**
          * @brief Loads level data from text file and puts it into vector.
          * @param filename The file to load the data from.
@@ -53,7 +60,7 @@ class Level : public Screen
 
     public:
         Level(u32 number, std::unique_ptr<Player> player) : levelNumber(number), p(std::move(player)), attempts(1), levelComplete(false), 
-        lvlMusic("level" + std::to_string(levelNumber) + ".ogg"), deathSfx("death.wav"), clearSfx("clear.wav") { loadFromFile("../assets/level" + std::to_string(number) + ".txt"); }
+        lvlMusic("level" + std::to_string(levelNumber) + ".ogg"), deathSfx("death.wav"), clearSfx("clear.wav"), speed(1) { loadFromFile("../assets/level" + std::to_string(number) + ".txt"); }
         ~Level() {} 
 
 

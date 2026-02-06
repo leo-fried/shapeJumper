@@ -40,8 +40,8 @@ void Level::load()
         }
         if (lineCount == (LINES - p->getPosY()))
         {
-            if (line.empty()) levelData[lineCount].insert(0 ," ");
-            char currPos = levelData[lineCount][0];
+            if (line.size() < p->getPosX()) for(uSize i = 0; i < p->getPosX(); i++) levelData[lineCount].insert(line.back() ," ");
+            char currPos = levelData[lineCount][p->getPosX()];
             // Collision Logic
             switch (currPos)
             {
@@ -77,7 +77,20 @@ void Level::load()
                     // Set current platform position
                     p->setPlatformPos(LINES-lineCount);
                     if(p->getPlatformPos() == p->getPosY()) eop = false; // If player is currently falling, stop
-                    if(levelData[lineCount][1] != '_') eop = true;// If next platform is not a platform, prepare to fall on next frame
+                    if(levelData[lineCount][p->getPosX() + 1] != '_') eop = true;// If next platform is not a platform, prepare to fall on next frame
+                    break;
+                }
+                // Bounce pad
+                case 'B':
+                {
+                    bounce = true;
+                    p->setHeight(6); // Adjust height for bounce pad
+                    break;
+                }
+                // Coin
+                case '*':
+                {
+                    coins++;
                     break;
                 }
                 // Other
@@ -91,7 +104,8 @@ void Level::load()
                             if(p->isJumpingStatus()) eop = false;
                             else
                             {
-                                p->setPosY(p->getPosY()-1);
+                               fall = true;
+                               p->setFalling(true);
                             }
                         }
                     break;
@@ -106,8 +120,8 @@ void Level::load()
                     break;
                 }
             }
-
-            levelData[lineCount][0] = p->getIcon()[0]; // Place player icon on screen
+            prevChar = levelData[lineCount][p->getPosX()];
+            levelData[lineCount][p->getPosX()] = p->getIcon()[0]; // Place player icon on screen
         }
         // Print the current line
         mvprintw(lineCount, 0, "%s", levelData[lineCount].c_str());
@@ -115,11 +129,13 @@ void Level::load()
     }
     refresh(); // refresh the screen to show changes
 
-    // Move level by 1 space at a time for next iteration
+    // Move level by speed space(s) at a time for next iteration
     for(auto& line : levelData)
     {
-        if(line.empty()) continue;
-        line.erase(0,1);        
+        if(line.size() < p->getPosX()) continue;
+        
+        line.erase(0,speed);
+        if(line[p->getPosX() - 1] == p->getIcon()[0]) line[p->getPosX() - 1] = prevChar;        
     }
     
 }
@@ -139,12 +155,13 @@ std::unique_ptr<Player> Level::simulateGame()
         // Check if level is complete
         if(levelComplete)
         {
-            clearSfx.playAudio();
+            clearSfx.playAudio(50.f);
             lvlMusic.stopAudio();
             p->setCompletedLevel(levelNumber - 1); // Mark level as complete
             clear();
             f.printText("LEVEL COMPLETE!!!");
             printw("\nAttempts: %s\n", std::to_string(attempts).c_str());
+            printw("Coins collected: %s\n", std::to_string(coins).c_str());
             f.printText("PRESS ESC...");
             while ((ch = getch()) != 27) {} // wait for escape key
             clear();
@@ -165,7 +182,7 @@ std::unique_ptr<Player> Level::simulateGame()
             p->setAlive(true);
             attemptFlag = true;
         }
-        if (ch == ' ')
+        if (ch == ' ' || bounce || fall)
         {
             if(!p->isJumpingStatus()) // Jump if space key is pressed and player is not already jumping
             {
@@ -177,6 +194,12 @@ std::unique_ptr<Player> Level::simulateGame()
                 {
                     load();
                     std::this_thread::sleep_for(std::chrono::milliseconds(50)); // Control jump speed to 20 times/second
+                }
+                if(fall) fall = false;
+                if(bounce) 
+                {
+                    bounce = false;
+                    p->setHeight(p->getDefaultHeight()); // Reset height after bounce
                 }
             }
         }

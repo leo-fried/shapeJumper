@@ -11,9 +11,18 @@
 class Player
 {
     private:
+        u32 posX;
         std::string icons[8] = {"@", "!", "%", "&", "$", "M", "Q", "+"}; // available icons
         const u32 ICONCOUNT = 8;
         bool completedLevels[3]; // tracks levels that the player has completed
+        u32 platformPos;
+        bool alive;
+        u32 deltaY; // Change in Y pos per jump
+        // Jump data
+        const u32 DEFAULT_HEIGHT = 4;
+        u32 height; // max jump height
+        bool isJumping; // whether the player is currently jumping
+        bool isFalling; // whether the player is falling or rising
 
         /**
          * @brief Loads the player's completed levels from a file.
@@ -23,16 +32,9 @@ class Player
 
     protected:
         u32 posY;
-        u32 platformPos;
-        bool alive;
         std::string icon; // Player icon
-        u32 deltaY; // Change in Y pos per jump
-        // Jump data
-        u32 height; // max jump height
-        bool isJumping; // whether the player is currently jumping
-        bool isFalling; // whether the player is falling or rising
     public:
-        Player() : completedLevels{false, false, false}, posY(0), platformPos(0), alive(true), icon("@"), deltaY(1), height(4), isJumping(false), isFalling(false) { loadData(); }
+        Player() : posX(10), completedLevels{false, false, false}, platformPos(0), alive(true), deltaY(1), height(DEFAULT_HEIGHT), isJumping(false), isFalling(false), posY(0), icon("@") { loadData(); }
 
         virtual ~Player() {}
 
@@ -50,6 +52,19 @@ class Player
 
         std::string* getAvailableIcons() {return icons;}
         u32 getIconCount() {return ICONCOUNT;}
+
+        /**
+         * @brief Gets the player's X position.
+         * @return The X position of the player.
+         */
+        u32 getPosX() {return posX;}
+
+        /**
+         * @brief Sets the player's X position.
+         * @param x The X position to set.
+         */
+        void setPosX(u32 x) {posX = x;}
+
 
         /**
          * @brief Gets the player's Y position.
@@ -80,6 +95,8 @@ class Player
 
         u32 getHeight() {return height;}
         void setHeight(u32 h) {height = h;}
+
+        u32 getDefaultHeight() { return DEFAULT_HEIGHT; }
 
         bool isFallingStatus() {return isFalling;}
         void setFalling(bool falling) {isFalling = falling;}

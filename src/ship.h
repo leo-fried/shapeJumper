@@ -22,7 +22,7 @@ class Ship : public Player
         /**
          * @brief Causes the ship to fall
          */
-        void fall() override { if(posY > 0) posY--; }
+        void fall() override { if(posY > getPlatformPos()) posY--; }
 };
 
 #endif // SHIP_H
