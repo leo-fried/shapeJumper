@@ -5,6 +5,7 @@
 #include <chrono>
 #include <fstream>
 #include <iostream>
+#include <map> // Coin identifying
 #include <thread>
 #include <vector>
 
@@ -15,6 +16,8 @@
 #include "screen.h"
 #include "sfx.h"
 #include "ship.h"
+
+// Data for coins
 
 class Level : public Screen
 {
@@ -43,7 +46,16 @@ class Level : public Screen
 
         bool fall = false; // flag for falling
         bool bounce = false; // flag for bounce pad
-        u8 coins = 0;
+
+
+        /**
+         * A map to store coins
+         * Key: (size_t) the X-Position of the coin
+         * Value: (bool) False if the coin has not been collected, true if it has
+         */
+        std::map<uSize, bool> coins; 
+        uSize levelPos; // Player's position in the level
+
         u32 speed; // Level speed
         
         char prevChar; // stores the previous character for frame advancement
@@ -58,9 +70,11 @@ class Level : public Screen
          */
         void load() override;
 
+        void identifyCoins(const std::string& line);
+
     public:
         Level(u32 number, std::unique_ptr<Player> player) : levelNumber(number), p(std::move(player)), attempts(1), levelComplete(false), 
-        lvlMusic("level" + std::to_string(levelNumber) + ".ogg"), deathSfx("death.wav"), clearSfx("clear.wav"), speed(1) { loadFromFile("../assets/level" + std::to_string(number) + ".txt"); }
+        lvlMusic("level" + std::to_string(levelNumber) + ".ogg"), deathSfx("death.wav"), clearSfx("clear.wav"), levelPos(p->getPosX()), speed(1) { loadFromFile("../assets/level" + std::to_string(number) + ".txt"); }
         ~Level() {} 
 
 

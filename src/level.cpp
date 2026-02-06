@@ -14,9 +14,23 @@ void Level::loadFromFile(std::string filename)
     while (std::getline(levelFile, line))
     {
         levelData.push_back(line);
+        identifyCoins(line);
     }
     levelFile.close();
     levelDataCpy = levelData;
+}
+
+void Level::identifyCoins(const std::string& line)
+{
+    uSize idx = 0;
+    for(const auto&c : line)
+    {
+        if(c == '*') 
+        {
+            coins.insert({idx, false});
+        }
+        idx++;
+    }
 }
 
 void Level::load()
@@ -90,7 +104,13 @@ void Level::load()
                 // Coin
                 case '*':
                 {
-                    coins++;
+                    // Erase coin from screen
+                    levelData[lineCount][p->getPosX()] = ' ';
+                    for(auto& c : coins)
+                    {
+                        if(c.first == levelPos) { c.second = true; }
+                        
+                    }
                     break;
                 }
                 // Other
@@ -137,6 +157,7 @@ void Level::load()
         line.erase(0,speed);
         if(line[p->getPosX() - 1] == p->getIcon()[0]) line[p->getPosX() - 1] = prevChar;        
     }
+    levelPos+= speed; // Iterate position in level by speed
     
 }
 
@@ -161,7 +182,14 @@ std::unique_ptr<Player> Level::simulateGame()
             clear();
             f.printText("LEVEL COMPLETE!!!");
             printw("\nAttempts: %s\n", std::to_string(attempts).c_str());
-            printw("Coins collected: %s\n", std::to_string(coins).c_str());
+            std::string coinSummary = " ";
+            for(const auto& c : coins)
+            {
+                if(c.second == true) coinSummary += '*';
+                else coinSummary += '_';
+                coinSummary += ' ';
+            }
+            printw("Coins collected:%s\n", coinSummary.c_str());
             f.printText("PRESS ESC...");
             while ((ch = getch()) != 27) {} // wait for escape key
             clear();
