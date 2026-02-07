@@ -5,14 +5,17 @@
 
 #include "player.h"
 #include "properties.h"
+#include "sfx.h"
 
 // Inherits from player
 class Ball : public Player
 {
     private:
         bool gravity; // False if ball is on floor, true if ball is on ceiling
+
+        u32 newPlatformPos; // For hitting platforms from bottom
     public:
-        Ball(): gravity(false) { icon = "O";}
+        Ball(): gravity(false), newPlatformPos(getPlatformPos()) { icon = "O";}
         ~Ball() {}
 
         /**

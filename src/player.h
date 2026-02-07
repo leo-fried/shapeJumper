@@ -113,6 +113,7 @@ class Player
         /**
          * @brief Makes the player jump.
          * @return True if jump is incomplete, false if jump is complete
+         * @param y The Y position to jump from (default, 0). Used for calculating jump height when jumping from platforms.
          */
         virtual bool jump(u32 y = 0);
 

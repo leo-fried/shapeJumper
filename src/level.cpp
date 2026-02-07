@@ -217,6 +217,7 @@ std::unique_ptr<Player> Level::simulateGame()
                 delay = std::chrono::steady_clock::now();
                 p->setJumping(true); // allow for jump key to be held
                 u32 currY = p->getPosY(); // Get current Y pos before jump commences
+                
 
                 while (p->jump(currY) == true) // jump
                 {

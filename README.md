@@ -3,6 +3,7 @@
 Shape Jumper is a simple yet addicting platforming game where the user must avoid obstacles and make it to the goal.
 
 ## Installation
+Install Ncurses for proper terminal usage.
 
 Install the SFLM Library using the following command if you wish to listen to the in-game audio: `sudo apt install libsfml-dev` or `sudo dnf install SFML-devel` depending on your distrobution.
 
@@ -29,6 +30,12 @@ Level 1 Music: Song: Swing Rabbit ! Swing !
 Composer: Amarià
 Website: https://www.youtube.com/channel/UCjpsqeJxRUqIBSl0tVSlCog
 License: Creative Commons (BY 3.0) https://creativecommons.org/licenses/by/3.0/
+Music powered by BreakingCopyright: https://breakingcopyright.com
+
+Level 2 Music: Song: Dragon Castle
+Composer: Makai Symphony
+Website: https://www.youtube.com/channel/UC8cn3OdeqYhyhNUyrMxOQKQ
+License: Creative Commons (BY-NC 3.0) https://creativecommons.org/licenses/by-nc/3.0/
 Music powered by BreakingCopyright: https://breakingcopyright.com
 
 ## License
