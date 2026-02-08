@@ -179,7 +179,6 @@ std::unique_ptr<Player> Level::simulateGame()
         {
             clearSfx.playAudio(50.f);
             lvlMusic.stopAudio();
-            p->setCompletedLevel(levelNumber - 1); // Mark level as complete
             clear();
             f.printText("LEVEL COMPLETE!!!");
             printw("\nAttempts: %s\n", std::to_string(attempts).c_str());
@@ -192,6 +191,12 @@ std::unique_ptr<Player> Level::simulateGame()
             }
             printw("Coins collected:%s\n", coinSummary.c_str());
             f.printText("PRESS ESC...");
+
+            p->setCompletedLevel(levelNumber - 1); // Mark level as complete
+            p->setCoins(levelNumber - 1, coinSummary); // Save coins
+            p->setTotalAttempts(levelNumber - 1, attempts); // Add to attempt total
+            p->saveData(levelNumber); // Save data
+
             while ((ch = getch()) != 27) {} // wait for escape key
             clear();
             if(pCpy) p = std::move(pCpy);

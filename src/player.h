@@ -8,13 +8,19 @@
 
 #include "properties.h"
 
+const uSize LEVELCOUNT = 3; // Number of levels in-game
+
 class Player
 {
     private:
         u32 posX;
         std::string icons[8] = {"@", "!", "%", "&", "$", "M", "8", "+"}; // available icons
         const u32 ICONCOUNT = 8;
-        bool completedLevels[3]; // tracks levels that the player has completed
+        
+        bool completedLevels[LEVELCOUNT]; // tracks levels that the player has completed
+        std::string coinsCollected[LEVELCOUNT];
+        u32 totalAttempts[LEVELCOUNT];
+
         u32 platformPos;
         bool alive;
         u32 deltaY; // Change in Y pos per jump
@@ -24,10 +30,9 @@ class Player
         bool isJumping; // whether the player is currently jumping
 
         /**
-         * @brief Loads the player's completed levels from a file.
-         * @param filename The file to load the data from (default, playerSave.txt).
+         * @brief Loads the player's data for each level
          */
-        void loadData(std::string filename = "playerSave.txt");
+        void loadData();
 
     protected:
         u32 posY;
@@ -35,7 +40,7 @@ class Player
         std::string icon; // Player icon
         bool gravity; // false for normal gravity, true for anti gravity
     public:
-        Player() : posX(10), completedLevels{false, false, false}, platformPos(0), alive(true), deltaY(1), height(DEFAULT_HEIGHT), isJumping(false), posY(0), icon("@"), gravity(false) { loadData(); }
+        Player() : posX(10), completedLevels{false, false, false}, coinsCollected{"_ _ _", "_ _ _", "_ _ _"}, totalAttempts{0,0,0}, platformPos(0), alive(true), deltaY(1), height(DEFAULT_HEIGHT), isJumping(false), posY(0), icon("@"), gravity(false) { loadData(); }
 
         virtual ~Player() {}
 
@@ -109,6 +114,12 @@ class Player
         bool getCompletedLevel( u32 idx ) { return completedLevels[idx]; }
         void setCompletedLevel( u32 idx ) { completedLevels[idx] = true; }
 
+        std::string getCoins( u32 idx ) { return coinsCollected[idx]; }
+        void setCoins( u32 idx, std::string coin ) { coinsCollected[idx] = coin; }
+
+        u32 getTotalAttempts( u32 idx ) { return totalAttempts[idx]; }
+        void setTotalAttempts( u32 idx, u32 attempts ) { totalAttempts[idx] += attempts; }
+
         u32 getNewPlatformPos() { return newPlatformPos; }
         void setNewPlatformPos(u32 pos) { newPlatformPos = pos; }
 
@@ -126,11 +137,11 @@ class Player
         virtual bool fall();
 
         /**
-         * @brief Saves the player's completed levels to a file.
-         * @param filename The file to save the data to (default, playerSave.txt).
+         * @brief Saves the player's data to a file in the ../data directory"
+         * @param levelNum The level number to save to (Each level number corresponds to a levelN.txt data file).
          * @return 0 if successful, -1 if unsuccessful
          */
-        s16 saveData(std::string filename = "playerSave.txt");
+        s16 saveData(u32 levelNum);
 };
 
 #endif // PLAYER_H

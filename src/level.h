@@ -43,7 +43,6 @@ class Level : public Screen
         bool fall = false; // flag for falling
         bool bounce = false; // flag for bounce pad
 
-
         /**
          * A map to store coins
          * Key: (size_t) the X-Position of the coin
@@ -71,8 +70,7 @@ class Level : public Screen
     public:
         Level(u32 number, std::unique_ptr<Player> player) : levelNumber(number), p(std::move(player)), attempts(1), levelComplete(false), 
         lvlMusic("level" + std::to_string(levelNumber) + ".ogg"), deathSfx("death.wav"), clearSfx("clear.wav"), levelPos(p->getPosX()), speed(1) { loadFromFile("../assets/level" + std::to_string(number) + ".txt"); }
-        ~Level() {} 
-
+        ~Level() {}
 
         /**
          * @brief Simulates the gameplay by refreshing the screen 20 times/second.

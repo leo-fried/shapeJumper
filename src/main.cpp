@@ -87,6 +87,8 @@ int main (int argc, char** argv)
                 {
                     f.printText("SWING RABBIT");
                     f.printText("PRESS ENTER TO CONTINUE...");
+                    printw("Coins collected : %s", p->getCoins(0).c_str());
+                    printw(" Total Attempts : %d\n", p->getTotalAttempts(0));
                     break;
                 }
                 case 1:
@@ -163,8 +165,6 @@ int main (int argc, char** argv)
                 }
                 
             }
-            // Attempt to save data
-            if (p->saveData() == -1) std::cerr << "Unable to save data.\n";
             clear();
         }
         
