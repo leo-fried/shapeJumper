@@ -10,7 +10,7 @@ void initTerminal()
     keypad(stdscr, TRUE);  // Enable special keys
     nodelay(stdscr, TRUE); // Non-blocking input
     curs_set(0);           // Hide cursor
-    resize_term(14, 160);  // Resize terminal
+    resize_term(14, COLS);  // Resize terminal
 
 }
 

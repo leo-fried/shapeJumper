@@ -72,16 +72,15 @@ void Level::load()
                     p = std::make_unique<Ship>();
                     p->setPlatformPos(LINES-lineCount);
                     p->setPosY(LINES-lineCount);
-                    
-
                     break;
                 }
                 // Ball Portal
                 case ';':
                 {
-                    p->setPlatformPos(LINES-lineCount);
                     if(!pCpy) pCpy = std::move(p);
                     p = std::make_unique<Ball>();
+                    p->setPlatformPos(LINES-lineCount);
+                    p->setPosY(LINES-lineCount);
                     break;
                 }
                 // Player Portal
@@ -124,6 +123,8 @@ void Level::load()
                         if(c.first == levelPos) { c.second = true; }
                         
                     }
+                    // Treat as platform if platform is next
+                    if(levelData[lineCount][p->getPosX() + 1] == '_') p->setPlatformPos(LINES-lineCount);// If next platform is not a platform, prepare to fall on next frame
                     break;
                 }
                 // Other
@@ -198,7 +199,7 @@ std::unique_ptr<Player> Level::simulateGame()
             return std::move(p);
         }
         // Check for Death
-        if(!p->aliveStatus())
+        if(!p->aliveStatus() || ch == 'f')
         {
             deathSfx.playAudio(33.3f);
             std::this_thread::sleep_for(std::chrono::milliseconds(500)); // wait before restarting level
@@ -209,6 +210,8 @@ std::unique_ptr<Player> Level::simulateGame()
             attempts++;
             levelData = levelDataCpy; // Copy Original data back to indicate new attempt
             // Reset Game State
+            for(auto& c : coins) c.second = false;
+            levelPos = p->getPosX();
             p->setAlive(true);
             attemptFlag = true;
         }

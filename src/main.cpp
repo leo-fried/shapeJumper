@@ -85,13 +85,13 @@ int main (int argc, char** argv)
             {
                 case 0:
                 {
-                    f.printText("LEVEL 1: EASY");
+                    f.printText("SWING RABBIT");
                     f.printText("PRESS ENTER TO CONTINUE...");
                     break;
                 }
                 case 1:
                 {
-                    f.printText("LEVEL 2: MEDIUM");
+                    f.printText("DRAGON CASTLE");
                     if(p->getCompletedLevel(0) || g_debug) f.printText("PRESS ENTER TO CONTINUE...");
                     else f.printText("LOCKED...");
                     break;

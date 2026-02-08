@@ -14,7 +14,7 @@ class Ball : public Player
         bool gravity; // False if ball is on floor, true if ball is on ceiling
     public:
         Ball(): gravity(false) { icon = "O"; newPlatformPos = getPlatformPos(); }
-        ~Ball() {}
+        ~Ball() { gravity = false; }
 
         /**
          * @brief Makes the Ball jump (Different than the standard player)
