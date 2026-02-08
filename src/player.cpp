@@ -2,20 +2,20 @@
 
 bool Player::jump(u32 y)
 {
-    if(!isFalling) posY += deltaY;
-    else posY -= deltaY;
+    posY += deltaY;
     if (posY >= height + y) 
     {
         posY = height + y; // Clamp height
-        isFalling = true;
+        return false;
     }
-    if(posY <= platformPos) 
-    { 
-        posY = platformPos;
-        isFalling = false; 
-        return false; 
-    } // Reset bool for next jump
     return true;
+}
+
+bool Player::fall()
+{
+    if(posY > platformPos)  { posY-= deltaY; return true; }
+    posY = platformPos;
+    return false;
 }
 
 s16 Player::saveData(std::string filename)

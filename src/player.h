@@ -12,7 +12,7 @@ class Player
 {
     private:
         u32 posX;
-        std::string icons[8] = {"@", "!", "%", "&", "$", "M", "Q", "+"}; // available icons
+        std::string icons[8] = {"@", "!", "%", "&", "$", "M", "8", "+"}; // available icons
         const u32 ICONCOUNT = 8;
         bool completedLevels[3]; // tracks levels that the player has completed
         u32 platformPos;
@@ -22,7 +22,6 @@ class Player
         const u32 DEFAULT_HEIGHT = 4;
         u32 height; // max jump height
         bool isJumping; // whether the player is currently jumping
-        bool isFalling; // whether the player is falling or rising
 
         /**
          * @brief Loads the player's completed levels from a file.
@@ -32,9 +31,11 @@ class Player
 
     protected:
         u32 posY;
+        u32 newPlatformPos; // For ball logic
         std::string icon; // Player icon
+        bool gravity; // false for normal gravity, true for anti gravity
     public:
-        Player() : posX(10), completedLevels{false, false, false}, platformPos(0), alive(true), deltaY(1), height(DEFAULT_HEIGHT), isJumping(false), isFalling(false), posY(0), icon("@") { loadData(); }
+        Player() : posX(10), completedLevels{false, false, false}, platformPos(0), alive(true), deltaY(1), height(DEFAULT_HEIGHT), isJumping(false), posY(0), icon("@"), gravity(false) { loadData(); }
 
         virtual ~Player() {}
 
@@ -50,6 +51,7 @@ class Player
          */
         void setIcon(std::string c) {icon = c;} 
 
+        
         std::string* getAvailableIcons() {return icons;}
         u32 getIconCount() {return ICONCOUNT;}
 
@@ -98,9 +100,6 @@ class Player
 
         u32 getDefaultHeight() { return DEFAULT_HEIGHT; }
 
-        bool isFallingStatus() {return isFalling;}
-        void setFalling(bool falling) {isFalling = falling;}
-
         bool isJumpingStatus() {return isJumping;}
         void setJumping(bool jumping) { isJumping = jumping; }
 
@@ -109,6 +108,9 @@ class Player
 
         bool getCompletedLevel( u32 idx ) { return completedLevels[idx]; }
         void setCompletedLevel( u32 idx ) { completedLevels[idx] = true; }
+
+        u32 getNewPlatformPos() { return newPlatformPos; }
+        void setNewPlatformPos(u32 pos) { newPlatformPos = pos; }
 
         /**
          * @brief Makes the player jump.
@@ -119,8 +121,9 @@ class Player
 
         /**
          * @brief Causes the player to fall
+         * @return true if player is still falling, false if they have finished falling
          */
-        virtual void fall() { return; }
+        virtual bool fall();
 
         /**
          * @brief Saves the player's completed levels to a file.

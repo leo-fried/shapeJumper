@@ -12,10 +12,8 @@ class Ball : public Player
 {
     private:
         bool gravity; // False if ball is on floor, true if ball is on ceiling
-
-        u32 newPlatformPos; // For hitting platforms from bottom
     public:
-        Ball(): gravity(false), newPlatformPos(getPlatformPos()) { icon = "O";}
+        Ball(): gravity(false) { icon = "O"; newPlatformPos = getPlatformPos(); }
         ~Ball() {}
 
         /**
@@ -23,6 +21,16 @@ class Ball : public Player
          * @return True if jump is incomplete, false if jump is complete
          */
         bool jump(u32 y) override;
+
+        /**
+         * @brief Causes the ball to fall
+         * @return Returns true if ball is still falling, false otherwise.
+         */
+        bool fall() override;
+
+        bool getGravity() { return gravity; }
+        void setGravity(bool g) { gravity = g; }
+    
 };
 
 #endif // Ball_H

@@ -5,18 +5,6 @@ bool Ball::jump([[maybe_unused]] u32 y)
     // Case 1: jump from normal gravity
     if(!gravity && posY < 13) // Clamp to max height
     {
-        // Fall behavior
-        if(isFallingStatus())
-        {
-            if(posY == getPlatformPos()) 
-            {
-                newPlatformPos = 0; // Reset
-                setFalling(false);
-                return false;
-            }
-            posY--;
-            return true;
-        }
         // Check if platform changed, if not increment Y-position and return true
         if(getPlatformPos() == newPlatformPos)
         {
@@ -35,19 +23,6 @@ bool Ball::jump([[maybe_unused]] u32 y)
     // Case 2: Jump from anti gravity
     else if(gravity && posY > 0) // Clamp to min height
     {
-        
-        // Fall behavior (anti grav)
-        if(isFallingStatus())
-        {
-            if(posY == getPlatformPos() || posY == 13) 
-            {
-                newPlatformPos = getPlatformPos(); // Reset
-                setFalling(false);
-                return false;
-            }
-            posY++;
-            return true;
-        }
         // Check if platform changed, if not de-increment Y-position and return true
         if(getPlatformPos() == newPlatformPos)
         {
@@ -64,4 +39,16 @@ bool Ball::jump([[maybe_unused]] u32 y)
     }
     gravity = !gravity; // flip gravity
     return false; // Complete jump
+}
+
+bool Ball::fall()
+{
+    if(posY == getPlatformPos()) 
+    {
+            newPlatformPos = getPlatformPos(); // Reset
+            return false;
+    }
+    // Fall down in normal gravity, fall up in anti gravity
+    else gravity ? posY ++ : posY--;
+    return true;
 }

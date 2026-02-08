@@ -2,6 +2,7 @@
 #define SHIP_H
 
 #include <iostream>
+#include <chrono>
 
 #include "player.h"
 #include "properties.h"
@@ -9,6 +10,9 @@
 // Inherits from player
 class Ship : public Player
 {
+    private:
+        std::chrono::time_point<std::chrono::steady_clock> now; // Current time point
+        std::chrono::time_point<std::chrono::steady_clock> delay; // Time point for controlling fall speed
     public:
         Ship() { icon = ">";}
         ~Ship() {}
@@ -21,8 +25,9 @@ class Ship : public Player
 
         /**
          * @brief Causes the ship to fall
+         * @return Returns true if ship is still falling, false otherwise.
          */
-        void fall() override { if(posY > getPlatformPos()) posY--; }
+        bool fall() override;
 };
 
 #endif // SHIP_H

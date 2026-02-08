@@ -70,11 +70,16 @@ void Level::load()
                 {
                     if(!pCpy) pCpy = std::move(p);
                     p = std::make_unique<Ship>();
+                    p->setPlatformPos(LINES-lineCount);
+                    p->setPosY(LINES-lineCount);
+                    
+
                     break;
                 }
                 // Ball Portal
                 case ';':
                 {
+                    p->setPlatformPos(LINES-lineCount);
                     if(!pCpy) pCpy = std::move(p);
                     p = std::make_unique<Ball>();
                     break;
@@ -83,6 +88,8 @@ void Level::load()
                 case '0':
                 {
                     if(pCpy) p = std::move(pCpy);
+                    p->setPlatformPos(LINES-lineCount);
+                    p->setPosY(LINES-lineCount);
                     break;
                 }
                 // Platform
@@ -90,8 +97,7 @@ void Level::load()
                 {
                     // Set current platform position
                     p->setPlatformPos(LINES-lineCount);
-                    if(p->getPlatformPos() == p->getPosY()) eop = false; // If player is currently falling, stop
-                    if(levelData[lineCount][p->getPosX() + 1] != '_') eop = true;// If next platform is not a platform, prepare to fall on next frame
+                    if(levelData[lineCount][p->getPosX() + 1] == ' ') p->setPlatformPos(0);// If next platform is not a platform, prepare to fall on next frame
                     break;
                 }
                 // Bounce pad
@@ -99,6 +105,13 @@ void Level::load()
                 {
                     bounce = true;
                     p->setHeight(6); // Adjust height for bounce pad
+                    break;
+                }
+                // Small bounce pad
+                case 'b':
+                {
+                    bounce = true;
+                    p->setHeight(2); // Adjust height for small bounce pad
                     break;
                 }
                 // Coin
@@ -116,18 +129,7 @@ void Level::load()
                 // Other
                 case ' ':
                 {
-                    if(p->isJumpingStatus()) eop = true;
-                    // End of platform, fall 
-                        if(eop) 
-                        {
-                            p->setPlatformPos(0); // reset platform
-                            if(p->isJumpingStatus()) eop = false;
-                            else
-                            {
-                               fall = true;
-                               p->setFalling(true);
-                            }
-                        }
+                    p->setPlatformPos(0); // Assume platform is ground
                     break;
                 }
                 default:
@@ -165,13 +167,11 @@ std::unique_ptr<Player> Level::simulateGame()
 {
     load();
     levelComplete = false;
-    delay = std::chrono::steady_clock::now();
     lvlMusic.playAudio(false, 10);
     
     // Main level loop
     while (1)
     {
-        now = std::chrono::steady_clock::now();
         s32 ch = getch();
         // Check if level is complete
         if(levelComplete)
@@ -193,6 +193,8 @@ std::unique_ptr<Player> Level::simulateGame()
             f.printText("PRESS ESC...");
             while ((ch = getch()) != 27) {} // wait for escape key
             clear();
+            if(pCpy) p = std::move(pCpy);
+            p = std::make_unique<Player>();
             return std::move(p);
         }
         // Check for Death
@@ -210,23 +212,22 @@ std::unique_ptr<Player> Level::simulateGame()
             p->setAlive(true);
             attemptFlag = true;
         }
-        if (ch == ' ' || bounce || fall)
+        if (ch == ' ' || bounce)
         {
             if(!p->isJumpingStatus()) // Jump if space key is pressed and player is not already jumping
             {
-                delay = std::chrono::steady_clock::now();
                 p->setJumping(true); // allow for jump key to be held
                 u32 currY = p->getPosY(); // Get current Y pos before jump commences
                 
 
-                while (p->jump(currY) == true) // jump
+                while (bounce ? p->Player::jump(currY): p->jump(currY) == true) // jump/bounce logic (If bounce is true just do a normal player jump)
                 {
                     load();
                     std::this_thread::sleep_for(std::chrono::milliseconds(50)); // Control jump speed to 20 times/second
                 }
-                if(fall) fall = false;
                 if(bounce) 
                 {
+                    p->setNewPlatformPos(p->getPlatformPos());
                     bounce = false;
                     p->setHeight(p->getDefaultHeight()); // Reset height after bounce
                 }
@@ -236,14 +237,19 @@ std::unique_ptr<Player> Level::simulateGame()
         {
             clear();
             lvlMusic.stopAudio();
+            if(pCpy) p = std::move(pCpy);
+            p = std::make_unique<Player>();
             return std::move(p);
         }
         else 
         {
             p->setJumping(false); // allow for jump key to be held
-            if(now - delay > std::chrono::milliseconds(250)) p->fall();
-            load(); // Simply reload the level
-            std::this_thread::sleep_for(std::chrono::milliseconds(50)); // Control reload speed to 20 times/second
+            // Ensure screen refreshes at least once, but continue to refresh as player falls
+            do
+            {
+                load(); // Simply reload the level
+                std::this_thread::sleep_for(std::chrono::milliseconds(50)); // Control reload speed to 20 times/second
+            } while(p->fall() == true);
         }
     }
     

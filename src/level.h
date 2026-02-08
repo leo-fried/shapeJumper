@@ -2,7 +2,6 @@
 #define LEVEL_H
 
 #include <algorithm>
-#include <chrono>
 #include <fstream>
 #include <iostream>
 #include <map> // Coin identifying
@@ -25,9 +24,6 @@ class Level : public Screen
         u32 levelNumber;
         std::vector<std::string> levelData; // Vector to load level data from disk into memory
         std::vector<std::string> levelDataCpy; // Copy of level data for when restart is necessary
-
-        std::chrono::time_point<std::chrono::steady_clock> now; // Current time point
-        std::chrono::time_point<std::chrono::steady_clock> delay; // Time point for controlling fall speed
 
         std::unique_ptr<Player> p;
         std::unique_ptr<Player> pCpy; // Copy of player
