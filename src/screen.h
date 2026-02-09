@@ -20,7 +20,7 @@ class Screen
 
         /**
          * @brief Simulates the gameplay by refreshing the screen X times/second.
-         * @return Returns the player
+         * @return The player
          */
         virtual std::unique_ptr<Player> simulateGame() = 0;
 };

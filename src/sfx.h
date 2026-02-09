@@ -66,6 +66,12 @@ class Music
          * @brief Restarts the music track
          */
         void restartAudio() { music.setPlayingOffset(sf::Time::Zero); }
+
+        /**
+         * @brief Gets the length of the music track in seconds.
+         * @return The length of the music track in seconds.
+         */
+        float getLength() { return music.getDuration().asSeconds(); }
 };
 
 #endif // SFX_H

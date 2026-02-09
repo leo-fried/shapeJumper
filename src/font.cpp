@@ -1,10 +1,10 @@
 #include "font.h"
 
-void Font::printChar(char c, u32 row)
+void Font::printChar(char c, u16 row)
 {
     // 2D array representing character
-    u32 ROWS = 5;
-    u32 COLS = 5;
+    u16 ROWS = 5;
+    u16 COLS = 5;
     char carr[ROWS][COLS];
     switch(c)
     {
@@ -406,16 +406,13 @@ void Font::printChar(char c, u32 row)
             std::memcpy(carr, SP, sizeof(carr)); 
             break;
     }
-    for(u32 i = 0; i < ROWS; i++)
-    {
-        printw("%c", carr[row][i]);
-    }
+    for(uSize i = 0; i < ROWS; i++) printw("%c", carr[row][i]);
     
 }
 
-void Font::printText(std::string text)
+void Font::printText(const std::string& text)
 {
-    for(u32 row = 0; row < 5; row++)
+    for(uSize row = 0; row < 5; row++)
     {
         for(const auto& c : text)
         {

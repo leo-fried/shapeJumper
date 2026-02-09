@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <string>
-#include <cstring> // For std::memcpy
+#include <cstring>
 #include <vector>
 
 
@@ -17,15 +17,21 @@ class Font
          * @param c The character to be printed.
          * @param row The row position to start printing the character.
          */
-        void printChar(char c, u32 row);
+        void printChar(char c, u16 row);
     public:
+        /**
+         * @brief Default Font Constructor.
+         */
         Font(){}
+        /**
+         * @brief Default Font Destructor.
+         */
         ~Font(){}
         /**
          * @brief Prints text to the console using pixel art for each character.
          * @param text The text to print.
          */
-        void printText(std::string text);
+        void printText(const std::string& text);
         
 };
 

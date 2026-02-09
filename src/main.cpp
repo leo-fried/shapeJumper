@@ -87,14 +87,17 @@ int main (int argc, char** argv)
                 {
                     f.printText("SWING RABBIT");
                     f.printText("PRESS ENTER TO CONTINUE...");
-                    printw("Coins collected : %s", p->getCoins(0).c_str());
-                    printw(" Total Attempts : %d\n", p->getTotalAttempts(0));
+                    p->printStats(0);
                     break;
                 }
                 case 1:
                 {
                     f.printText("DRAGON CASTLE");
-                    if(p->getCompletedLevel(0) || g_debug) f.printText("PRESS ENTER TO CONTINUE...");
+                    if(p->getCompletedLevel(0) || g_debug) 
+                    {
+                        f.printText("PRESS ENTER TO CONTINUE...");
+                        p->printStats(1);
+                    }
                     else f.printText("LOCKED...");
                     break;
                 }

@@ -18,21 +18,21 @@ bool Player::fall()
     return false;
 }
 
-s16 Player::saveData(u32 levelNum)
+void Player::saveData(u32 levelNum)
 {
     std::ofstream saveData("../data/level" + std::to_string(levelNum) + ".txt");
-    if(!saveData.is_open()) return -1; // Failure
+    if(!saveData.is_open()) return; // Failure
         
     // Save if level has been completed
     saveData << completedLevels[levelNum - 1];
     // Save coins
-    saveData << "\n" << coinsCollected[levelNum -1];
+    saveData << "\n";
+    for(const auto& c: coinsCollected[levelNum -1]) saveData << std::to_string(c);
     // Save attempts
     saveData << "\n" << totalAttempts[levelNum - 1];
-    //TODO: Implement percentage
-
+    // Save Percentage
+    saveData << "\n" << levelPct[levelNum - 1];
     saveData.close();
-    return 0;
 }
 
 void Player::loadData()
@@ -57,7 +57,9 @@ void Player::loadData()
                 // What coins have been collected?
                 case 1:
                 {
-                    coinsCollected[i] = line;
+                    std::vector<u16> temp;
+                    for(const auto& c: line) temp.push_back(c == '1' ? 1 : 0);
+                    coinsCollected[i] = temp;
                     break; 
                 }
                 // How many total attempts have there been?
@@ -66,15 +68,27 @@ void Player::loadData()
                     totalAttempts[i] = stoi(line);
                     break; 
                 }
-                /* TODO: Implement Percentage
-                case 0:
+                // What is the best percentage?
+                case 3:
                 {
-                break; 
+                    levelPct[i] = stoi(line);
+                    break; 
                 }
-                */
             }
             lineCount++;
         }
         data.close();
     }
+}
+
+std::string Player::printCoins(u32 idx)
+{
+    std::string temp; 
+    for(const auto& c: coinsCollected[idx]) 
+    {
+        char ch = c == 1 ? '*' : '_'; 
+        temp.push_back(ch);
+        temp.push_back(' ');
+    }
+    return temp;
 }
