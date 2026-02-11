@@ -93,12 +93,26 @@ void Level::load()
                     p->setPosY(LINES-lineCount);
                     break;
                 }
+                // Anti-grav portal
+                {
+                    case '6':
+                    p->setGravity(true);
+                    p->setPlatformPos(13);
+                    break;
+                }
+                // Regular-grav portal
+                {
+                    case '9':
+                    p->setGravity(false);
+                    p->setPlatformPos(0);
+                    break;
+                }
                 // Platform
                 case '_':
                 {
                     // Set current platform position
                     p->setPlatformPos(LINES-lineCount);
-                    if(levelData[lineCount][p->getPosX() + 1] == ' ') p->setPlatformPos(0);// If next platform is not a platform, prepare to fall on next frame
+                    if(levelData[lineCount][p->getPosX() + 1] == ' ') p->setPlatformPos(p->getGravity() ? 13 : 0);// If next platform is not a platform, prepare to fall on next frame
                     break;
                 }
                 // Bounce pad
@@ -133,7 +147,7 @@ void Level::load()
                 // empty space, reset platform
                 case ' ':
                 {
-                    p->setPlatformPos(0);
+                    p->setPlatformPos(p->getGravity() ? 13 : 0); // Set platform depending on gravity
                     break;
                 }
                 // Death collision (Not in debug mode)

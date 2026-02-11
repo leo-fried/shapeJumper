@@ -11,13 +11,12 @@
 class Ball : public Player
 {
     private:
-        bool gravity; // False if ball is on floor, true if ball is on ceiling
         u32 newPlatformPos;
     public:
         /**
          * @brief Default Ball constructor.
          */
-        Ball(): gravity(false), newPlatformPos(getPlatformPos()) { icon = "O"; }
+        Ball(): newPlatformPos(getPlatformPos()) { icon = "O"; }
         /**
          * @brief Default Ball destructor.
          */
@@ -34,17 +33,6 @@ class Ball : public Player
          * @param pos The platform position to set.
          */
         void setNewPlatformPos(u32 pos) { newPlatformPos = pos; }
-
-        /**
-         * @brief Gets the ball's current gravity state.
-         * @return True if ball is in anti-gravity state, false if it is in normal gravity state.
-         */
-        bool getGravity() { return gravity; }
-        /**
-         * @brief Sets the ball's gravity to a specified state.
-         * @param g The state to set the gravity to (true = anti-gravity, false = normal gravity).
-         */
-        void setGravity(bool g) { gravity = g; }
 
         /**
          * @brief Makes the Ball jump (Different than the standard player)

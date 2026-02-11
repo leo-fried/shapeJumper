@@ -23,7 +23,6 @@ class Player
         u32 totalAttempts[LEVELCOUNT]; // Tracks total attempts in the level
         u16 levelPct[LEVELCOUNT]; // Tracks best percent achieved in the level
 
-        u32 platformPos;
         bool alive;
         u32 deltaY; // Change in Y pos per jump
         // Jump data
@@ -45,11 +44,12 @@ class Player
 
     protected:
         u32 posY;
+        u32 platformPos = 0;
         std::string icon; // Player icon
-        bool gravity; // false for normal gravity, true for anti gravity
+        bool gravity = false; // false for normal gravity, true for anti gravity
 
     public:
-        Player() : posX(10), completedLevels{false, false, false}, coinsCollected{{0,0,0}, {0,0,0}, {0,0,0}}, totalAttempts{0,0,0}, levelPct{0,0,0}, platformPos(0), alive(true), deltaY(1), height(DEFAULT_HEIGHT), isJumping(false), posY(0), icon("@"), gravity(false) { loadData(); }
+        Player() : posX(10), completedLevels{false, false, false}, coinsCollected{{0,0,0}, {0,0,0}, {0,0,0}}, totalAttempts{0,0,0}, levelPct{0,0,0}, alive(true), deltaY(1), height(DEFAULT_HEIGHT), isJumping(false), posY(0), icon("@") { loadData(); }
 
         virtual ~Player() {}
 
@@ -65,9 +65,28 @@ class Player
          */
         void setIcon(std::string c) {icon = c;} 
 
-        
+        /**
+         * @brief Gets all available player icons.
+         * @return The strings that contain the icons.
+         */
         std::string* getAvailableIcons() {return icons;}
+        /**
+         * @brief Returns the number of icons available.
+         * @return The number of icons.
+         */
         u32 getIconCount() {return ICONCOUNT;}
+
+        /**
+         * @brief Gets the player's gravity
+         * @return False if in normal gravity, true in anti-gravity
+         */
+        bool getGravity() { return gravity; }
+
+        /**
+         * @brief Sets the player's gravity
+         * @param g The gravity to set (false = normal, true = anti)
+         */
+        void setGravity(bool g) { gravity = g; }
 
         /**
          * @brief Gets the player's X position.

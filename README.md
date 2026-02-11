@@ -38,6 +38,12 @@ Website: https://www.youtube.com/channel/UC8cn3OdeqYhyhNUyrMxOQKQ
 License: Creative Commons (BY-NC 3.0) https://creativecommons.org/licenses/by-nc/3.0/
 Music powered by BreakingCopyright: https://breakingcopyright.com
 
+Level 3 Music: Song: Samurai
+Composer: DEAF KEV
+Website: https://www.youtube.com/c/DEAFKEV
+License: Creative Commons (BY-NC 3.0) https://creativecommons.org/licenses/by-nc/3.0/
+Music powered by BreakingCopyright: https://breakingcopyright.com
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)

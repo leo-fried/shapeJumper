@@ -103,8 +103,12 @@ int main (int argc, char** argv)
                 }
                 case 2:
                 {
-                    f.printText("LEVEL 3: HARD");
-                    if((p->getCompletedLevel(0) && p->getCompletedLevel(1)) || g_debug) f.printText("PRESS ENTER TO CONTINUE...");
+                    f.printText("SAMURAI");
+                    if((p->getCompletedLevel(0) && p->getCompletedLevel(1)) || g_debug)
+                    {
+                        f.printText("PRESS ENTER TO CONTINUE...");
+                        p->printStats(2);
+                    }
                     else f.printText("LOCKED...");
                     break;
                 }

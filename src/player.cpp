@@ -2,19 +2,39 @@
 
 bool Player::jump(u32 y)
 {
-    posY += deltaY;
-    if (posY >= height + y) 
+    if(!gravity)
+    {   
+        posY += deltaY;
+        if (posY >= height + y) 
+        {
+            posY = height + y; // Clamp height
+            return false;
+        }
+    }
+    else
     {
-        posY = height + y; // Clamp height
-        return false;
+        posY -= deltaY;
+        if (posY <= y - height)
+        {
+            posY = y - height; // Clamp height
+            return false;
+        }
     }
     return true;
 }
 
 bool Player::fall()
 {
-    if(posY > platformPos)  { posY-= deltaY; return true; }
-    posY = platformPos;
+    if(!gravity)
+    {
+        if(posY > platformPos)  { posY-= deltaY; return true; }
+        posY = platformPos;
+    }
+    else
+    {
+        if(posY < platformPos)  { posY+= deltaY; return true; }
+        posY = platformPos;
+    }
     return false;
 }
 
