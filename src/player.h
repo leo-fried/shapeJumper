@@ -45,11 +45,11 @@ class Player
     protected:
         u32 posY;
         u32 platformPos = 0;
-        std::string icon; // Player icon
+        std::string icon = "@"; // Player icon
         bool gravity = false; // false for normal gravity, true for anti gravity
 
     public:
-        Player() : posX(10), completedLevels{false, false, false}, coinsCollected{{0,0,0}, {0,0,0}, {0,0,0}}, totalAttempts{0,0,0}, levelPct{0,0,0}, alive(true), deltaY(1), height(DEFAULT_HEIGHT), isJumping(false), posY(0), icon("@") { loadData(); }
+        Player() : posX(10), completedLevels{false, false, false}, coinsCollected{{0,0,0}, {0,0,0}, {0,0,0}}, totalAttempts{0,0,0}, levelPct{0,0,0}, alive(true), deltaY(1), height(DEFAULT_HEIGHT), isJumping(false), posY(0) { loadData(); }
 
         virtual ~Player() {}
 

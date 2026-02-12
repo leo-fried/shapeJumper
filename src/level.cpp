@@ -95,14 +95,14 @@ void Level::load()
                 }
                 // Anti-grav portal
                 {
-                    case '6':
+                    case '^':
                     p->setGravity(true);
                     p->setPlatformPos(13);
                     break;
                 }
                 // Regular-grav portal
                 {
-                    case '9':
+                    case 'v':
                     p->setGravity(false);
                     p->setPlatformPos(0);
                     break;
@@ -112,7 +112,6 @@ void Level::load()
                 {
                     // Set current platform position
                     p->setPlatformPos(LINES-lineCount);
-                    if(levelData[lineCount][p->getPosX() + 1] == ' ') p->setPlatformPos(p->getGravity() ? 13 : 0);// If next platform is not a platform, prepare to fall on next frame
                     break;
                 }
                 // Bounce pad
