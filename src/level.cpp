@@ -58,6 +58,7 @@ void Level::load()
         {
             if (line.size() < p->getPosX()) for(uSize i = 0; i < p->getPosX(); i++) levelData[lineCount].insert(line.back() ," ");
             char currPos = levelData[lineCount][p->getPosX()]; // store current position
+            bool gTemp = p->getGravity();
             // Collision Logic
             switch (currPos)
             {
@@ -72,6 +73,7 @@ void Level::load()
                 {
                     if(!pCpy) pCpy = std::move(p);
                     p = std::make_unique<Ship>();
+                    p->setGravity(gTemp);
                     p->setPlatformPos(LINES-lineCount);
                     p->setPosY(LINES-lineCount);
                     break;
@@ -81,6 +83,7 @@ void Level::load()
                 {
                     if(!pCpy) pCpy = std::move(p);
                     p = std::make_unique<Ball>();
+                    p->setGravity(gTemp);
                     p->setPlatformPos(LINES-lineCount);
                     p->setPosY(LINES-lineCount);
                     break;
@@ -89,6 +92,7 @@ void Level::load()
                 case '0':
                 {
                     if(pCpy) p = std::move(pCpy);
+                    p->setGravity(gTemp);
                     p->setPlatformPos(LINES-lineCount);
                     p->setPosY(LINES-lineCount);
                     break;
@@ -126,6 +130,12 @@ void Level::load()
                 {
                     bounce = true;
                     p->setHeight(2); // Adjust height for small bounce pad
+                    break;
+                }
+                // Anti Grav bounce pad
+                case 'a':
+                {
+                    p->setGravity(!p->getGravity()); // Reverse grav
                     break;
                 }
                 // Coin
