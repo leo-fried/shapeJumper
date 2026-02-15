@@ -1,20 +1,13 @@
-# Define variables for easier maintenance
 CXX = g++
 CXXFLAGS = -Wall -Wextra -std=c++17
 LDFLAGS = -lncurses -lsfml-audio -lsfml-system
-TARGET = s
+TARGET = shapeJumper
 OBJS = main.o screen.o font.o properties.o level.o player.o ship.o ball.o sfx.o
 
-# Default target: builds the program by linking object files
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
 	$(CXX) $(OBJS) $(LDFLAGS) -o $@
-
-# Rule to compile source files into object files
-# This uses automatic variables:
-# $@ is the target name (e.g., main.o)
-# $< is the first prerequisite (e.g., main.cpp)
 main.o: main.cpp 
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
@@ -42,7 +35,6 @@ ball.o: ball.cpp ball.h
 sfx.o: sfx.cpp sfx.h
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# Phony target for cleaning up generated files
 .PHONY: clean
 clean:
 	rm -f $(TARGET) $(OBJS)
