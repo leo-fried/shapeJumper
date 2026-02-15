@@ -16,7 +16,7 @@ s32 main (s32 argc, char** argv)
             }
             else if(std::string(argv[1]) == "--version") 
             {
-                std::cout <<"1.0.0\n";
+                std::cout <<"Shape Jumper version 1.0.0 Copyright (c) 2026 Leo Friedman\n";
                 return EXIT_SUCCESS;
             }
             else if(std::string(argv[1]) == "--help")
