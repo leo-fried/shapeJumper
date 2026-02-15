@@ -1,6 +1,17 @@
+UNAME_S := $(shell uname -s)
+
+ifeq ($(UNAME_S),Darwin)
+    SFML_INCLUDE = -I/opt/homebrew/include
+    SFML_LIB = -L/opt/homebrew/lib
+else
+    SFML_INCLUDE =
+    SFML_LIB =
+endif
+
+
 CXX = g++
-CXXFLAGS = -Wall -Wextra -std=c++17
-LDFLAGS = -lncurses -lsfml-audio -lsfml-system
+CXXFLAGS = -Wall -Wextra -std=c++17 $(SFML_INCLUDE)
+LDFLAGS = -lncurses -lsfml-audio -lsfml-system $(SFML_LIB)
 TARGET = shapeJumper
 OBJS = main.o screen.o font.o properties.o level.o player.o ship.o ball.o sfx.o
 
