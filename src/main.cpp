@@ -3,17 +3,30 @@
 #include "properties.h"
 #include "sfx.h"
 
-int main (int argc, char** argv)
+s32 main (s32 argc, char** argv)
 {
-    initTerminal();
-
-    // Debug mode (Unlocks all levels and disables collision)
+    // program args
     if(argc == 2)
     {
-        if(std::string(argv[1]) != "--debug") { shutdownTerminal(); std::cerr << "Usage: " << argv[0] << " [--debug]" << std::endl; return EXIT_FAILURE; }
-        g_debug = true;
-        printw("Debug mode activated.\n");
+            // Debug mode (Unlocks all levels and disables collision)
+            if(std::string(argv[1]) == "--debug")
+            {
+                g_debug = true;
+                std::cout << "Debug mode activated.\n";
+            }
+            else if(std::string(argv[1]) == "--version") 
+            {
+                std::cout <<"1.0.0\n";
+                return EXIT_SUCCESS;
+            }
+            else if(std::string(argv[1]) == "--help")
+            {
+                std::cout << "Use the arrow keys to scroll through the levels.\nPress space to jump or esc to exit the current level.\nYour goal is to complete each level in as few attempts as possible (BONUS: try to collect all 3 secret coins '*' in each level).\n The '?' turns you into a ship which falls down unless you hit space and the ';' turns you into a ball which changes gravity when you hit space. '0' turns you back into your normal player.\n'^' enables anti-gravity and 'v' re-enables normal gravity. 'B' is a large bounce pad and 'b' is a small bounce pad, whereas 'a' will flip your current gravity.\n '2' doubles your speed and '1' sets it back to normal.\n";
+                return EXIT_SUCCESS;
+            }
     }
+
+    initTerminal();
 
     // Objects
     Font f;
