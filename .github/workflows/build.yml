@@ -1,9 +1,9 @@
-name: Build shapeJumper
+name: Build and Release shapeJumper
 
 on:
   push:
     tags:
-      - "v*"
+      - "v*"  # Only trigger on version tags
   workflow_dispatch:
 
 jobs:
@@ -18,23 +18,72 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
+    # Install dependencies for Linux
     - name: Install dependencies (Linux)
       if: runner.os == 'Linux'
       run: |
         sudo apt update
         sudo apt install -y build-essential libncurses-dev libsfml-dev
 
+    # Install dependencies for macOS
     - name: Install dependencies (macOS)
       if: runner.os == 'macOS'
       run: |
-        brew update
-        brew install sfml ncurses
+        brew update --quiet
+        brew install --quiet sfml ncurses
 
+    # Build inside src folder
     - name: Build
-      run: make
+      run: |
+        ls -la src
+        make -C src shapeJumper
 
-    - name: Upload binary
+    # Upload artifact for this runner
+    - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: shapeJumper-${{ runner.os }}
-        path: shapeJumper
+        path: src/shapeJumper
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download Linux artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: shapeJumper-Linux
+        path: artifacts
+
+    - name: Download macOS artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: shapeJumper-macOS
+        path: artifacts
+
+    - name: Create GitHub Release
+      id: create_release
+      uses: actions/create-release@v1
+      with:
+        tag_name: ${{ github.ref_name }}
+        release_name: ${{ github.ref_name }}
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload Linux binary to release
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: artifacts/shapeJumper-Linux/shapeJumper
+        asset_name: shapeJumper-Linux
+        asset_content_type: application/octet-stream
+
+    - name: Upload macOS binary to release
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: artifacts/shapeJumper-macOS/shapeJumper
+        asset_name: shapeJumper-macOS
+        asset_content_type: application/octet-stream
