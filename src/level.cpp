@@ -138,6 +138,17 @@ void Level::load()
                     p->setGravity(!p->getGravity()); // Reverse grav
                     break;
                 }
+                // 2x Speed boost
+                case '2':
+                {
+                    speed = 2;
+                    break;
+                }
+                case '1':
+                {
+                    speed = 1;
+                    break;
+                }
                 // Coin
                 case '*':
                 {
@@ -186,7 +197,8 @@ void Level::load()
         if(line.size() < p->getPosX()) continue;
         
         line.erase(0,speed);
-        if(line[p->getPosX() - 1] == p->getIcon()[0]) line[p->getPosX() - 1] = prevChar;        
+        if(line[p->getPosX() - 1] == p->getIcon()[0]) line[p->getPosX() - 1] = prevChar;
+        if(line[p->getPosX() - 2] == p->getIcon()[0]) line[p->getPosX() - 2] = prevChar;        
     }
     levelPos+= speed; // Iterate position in level by speed
     // Update percent 
